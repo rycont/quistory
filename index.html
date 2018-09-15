@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <title>문제수집</title>
+    <style>
+        @import url("http://fonts.googleapis.com/earlyaccess/notosanskr.css");
+
+        body {
+            margin: 0;
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #E5E5E5;
+        }
+
+        nav {
+            height: 123.8px;
+            background: linear-gradient(to right, #5EFCE8, #736EFE);
+            font-weight: 700;
+            font-size: 26px;
+            text-align: right;
+            line-height: 90px;
+            padding-right: 20px;
+            color: white;
+        }
+
+        a#btn {
+            height: 78.5px;
+            width: 258.5px;
+            font-size: 50px;
+            box-shadow: rgba(0, 0, 0, 0.31) 0px 0px 54.3px;
+            background: white;
+            border-radius: 78.5px;
+            position: absolute;
+            top: 84.6px;
+            left: 83.1px;
+            text-align: center;
+            line-height: 78.5px;
+            color: #62E2EC;
+            font-weight: 300;
+            transition: 300ms;
+        }
+
+        a#btn:hover {
+            box-shadow: rgba(0, 0, 0, 0.5) 0px 0px 74.3px;
+            transition: 300ms;
+        }
+
+        div#contain {
+            margin: 100px auto;
+            background-color: white;
+            max-width: 1080px;
+            padding: 50px;
+            box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8.3px;
+            border-radius: 7px;
+        }
+
+        #modal {
+            display: none;
+        }
+
+        #modal:target {
+            background-color: rgba(0, 0, 0, 0.3);
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            position: fixed;
+            display: block;
+        }
+
+        #modal:target #modalCon {
+            background-color: white;
+            width: 500px;
+            position: static;
+            margin: 100px auto;
+            padding: 30px;
+            box-sizing: unset;
+            border-radius: 10px;
+            box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 30px;
+        }
+        #modal:target h1 {
+            margin-top: 0px;
+            font-size: 20px;
+            margin-bottom: 50px;
+        }
+        #modal:target form span {
+            color: #9e9e9e;
+        }
+        #modal:target #submit {
+            width: 100px;
+            height: 50px;
+            text-align: center;
+            line-height: 50px;
+            background-color: #736EFE;
+            color: white;
+            font-weight: 500;
+            font-size: 20px;
+            box-shadow: #736EFE 0px 0px 10px;
+            border-radius: 10px;
+            transition: 300ms;
+        }
+        #modal:target #submit:hover {
+            box-shadow: #736EFE 0px 0px 30px;
+            transition: 300ms;
+        }
+        #modal:target p {
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+        #close {
+            text-align: right;
+            font-size: 30px;
+            line-height: 0px;
+            display: block;
+            color: black;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>문제 수집</nav>
+    <a id="btn" href="#modal">+</a>
+    <div id="modal">
+
+        <div id="modalCon">
+            <a id="close" href="#">×</a>
+            <h1>새 문제 등록</h1>
+            <p>저작권자: 문제를 만든 사람을 적어주세요</p>
+            <p>문제: 글자수의 제한 없이 적어주세요. 줄 바꿈 가능합니다. 객관식이라면 문항도 적어주세요.</p>
+            <p>정답: 주관식이면 답을 적어주시고, OX라면 O혹은 X, 객관식이면 답 번호만 적어주시면 됩니다.</p>
+            <div class="input-field">
+                <input id="author" type="text" class="validate">
+                <label for="author">저작권자</label>
+            </div>
+            <form>
+                <span>난이도</span>
+                <p class="range-field">
+                    <input type="range" id="difficulty" min="1" max="5" />
+                </p>
+            </form>
+            <div class="input-field">
+                <select id="domain">
+                    <optgroup label="문명의 형성">
+                        <option value="1">문명의 발생</option>
+                        <option value="2">고조선</option>
+                        <option value="3">옥저와 동예, 삼한</option>
+                    </optgroup>
+                    <optgroup label="삼국의 성립">
+                        <option value="3">삼국의 형성과 가야</option>
+                        <option value="4">삼국의 성장</option>
+                        <option value="5">삼국의 문화 교류</option>
+                    </optgroup>
+                    <optgroup label="남북국시대">
+                        <option value="6">통일신라의 성립</option>
+                        <option value="7">발해의 건국과 발전</option>
+                        <option value="8">흔들리는 신라와 후삼국</option>
+                    </optgroup>
+                    <optgroup label="고려">
+                            <option value="9">고려의 성립</option>
+                            <option value="10">고려의 무신정권</option>
+                            <option value="11">고려의 대몽항쟁</option>
+                            <option value="12">고려의 예술</option>
+                    </optgroup>
+                    <optgroup label="조선">
+                            <option value="13">조선의 성립</option>
+                            <option value="14">조선의 기술</option>
+                            <option value="15">사림과 성리학</option>
+                            <option value="16">외세의 침략</option>
+                            <option value="17">조선 후기의 정치</option>
+                            <option value="18">세도정치와 농민의 봉기</option>
+                    </optgroup>
+                </select>
+                <label>시대</label>
+            </div>
+            <div class="input-field">
+                <textarea id="question" class="materialize-textarea"></textarea>
+                <label for="question">문제</label>
+            </div>
+            <div class="input-field">
+                <input id="answer" type="text" class="validate">
+                <label for="answer">정답</label>
+            </div>
+            <div class="input-field">
+                <select id="type">
+                    <option value="" disabled>문제 유형을 골라주세요</option>
+                    <option value="1">OX</option>
+                    <option value="2">주관식</option>
+                    <option value="3" selected>객관식</option>
+                </select>
+                <label>문제 유형</label>
+            </div>
+            <div id="submit">제출</div>
+        </div>
+    </div>
+    <div id="contain">
+        <table>
+            <thead>
+                <tr id="th">
+                    <th>저작권자</th>
+                    <th>문제</th>
+                    <th>답</th>
+                    <th>난이도</th>
+                    <th>문제 유형</th>
+                    <th>시대</th>
+                </tr>
+            </thead>
+            <tbody id="table">
+            </tbody>
+        </table>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        function $(t) {
+            return document.getElementById(t)
+        }
+
+        function renderList(el, arr) {
+            el.innerHTML = ''
+            arr.forEach(element => {
+                el.innerHTML +=
+                    `<tr>
+                    <td>${element.author}</td>
+                    <td>${element.question}</td>
+                    <td>${element.answer}</td>
+                    <td>별 ${element.difficulty}개</td>
+                    <td>${element.type}</td>
+                    <td>${element.domain}</td>
+                </tr>`
+            })
+        }
+        let list
+        fetch('http://localhost:1337/question').then(res => {
+            res.text().then(text => {
+                const table = $('table')
+                list = JSON.parse(text)
+                renderList(table, list)
+            })
+        })
+        const th = $('th')
+        const alise = {
+            저작권자: 'author',
+            문제: 'question',
+            답: 'answer',
+            난이도: 'difficulty',
+            "문제 유형": 'type',
+            시대: 'domain'
+        }
+
+        function predicateBy(prop) {
+            return function (a, b) {
+                if (a[prop] > b[prop]) {
+                    return 1;
+                } else if (a[prop] < b[prop]) {
+                    return -1;
+                }
+                return 0;
+            }
+        }
+        th.childNodes.forEach((x, i) => {
+            if (i % 2) {
+                x.addEventListener('click', (e) => {
+                    list.sort(predicateBy(alise[e.path[0].innerHTML]))
+                    renderList(table, list)
+                })
+            }
+        })
+        document.addEventListener('DOMContentLoaded', () => M.FormSelect.init(document.querySelectorAll('select')))
+        $('submit').addEventListener('click', (e) => {
+            const que = {
+                author: $('author').value,
+                difficulty: Number($('difficulty').value),
+                domain: $('domain').options[$('domain').selectedIndex].text,
+                question: $('question').value,
+                answer: $('answer').value,
+                type: $('type').options[$('type').selectedIndex].text
+            }
+            console.log(que)
+            if(que.author && que.difficulty && que.domain && que.question && que.answer && que.type) {
+                fetch('http://wjdgks1224.iptime.org:1337/question', {
+                    method: 'post',
+                    body: JSON.stringify(que),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(() => {
+                    $('close').click()
+                    location.reload()
+                })
+            }
+        })
+    </script>
+</body>
+
+</html>
