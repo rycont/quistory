@@ -73,7 +73,7 @@
 
         #modal:target #modalCon {
             background-color: white;
-            width: 500px;
+            max-width: 500px;
             position: static;
             margin: 100px auto;
             padding: 30px;
@@ -160,18 +160,18 @@
                         <option value="8">흔들리는 신라와 후삼국</option>
                     </optgroup>
                     <optgroup label="고려">
-                            <option value="9">고려의 성립</option>
-                            <option value="10">고려의 무신정권</option>
-                            <option value="11">고려의 대몽항쟁</option>
-                            <option value="12">고려의 예술</option>
+                        <option value="9">고려의 성립</option>
+                        <option value="10">고려의 무신정권</option>
+                        <option value="11">고려의 대몽항쟁</option>
+                        <option value="12">고려의 예술</option>
                     </optgroup>
                     <optgroup label="조선">
-                            <option value="13">조선의 성립</option>
-                            <option value="14">조선의 기술</option>
-                            <option value="15">사림과 성리학</option>
-                            <option value="16">외세의 침략</option>
-                            <option value="17">조선 후기의 정치</option>
-                            <option value="18">세도정치와 농민의 봉기</option>
+                        <option value="13">조선의 성립</option>
+                        <option value="14">조선의 기술</option>
+                        <option value="15">사림과 성리학</option>
+                        <option value="16">외세의 침략</option>
+                        <option value="17">조선 후기의 정치</option>
+                        <option value="18">세도정치와 농민의 봉기</option>
                     </optgroup>
                 </select>
                 <label>시대</label>
@@ -279,7 +279,7 @@
                 type: $('type').options[$('type').selectedIndex].text
             }
             console.log(que)
-            if(que.author && que.difficulty && que.domain && que.question && que.answer && que.type) {
+            if (que.author && que.difficulty && que.domain && que.question && que.answer && que.type) {
                 fetch('http://wjdgks1224.iptime.org:1337/question', {
                     method: 'post',
                     body: JSON.stringify(que),
