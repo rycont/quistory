@@ -118,6 +118,9 @@
             color: black;
             opacity: 0.5;
         }
+        h4 {
+            margin-top: 0px;
+        }
     </style>
 </head>
 
@@ -208,6 +211,7 @@
                     <th>시대</th>
                 </tr>
             </thead>
+            <h4 id="count"></h4>
             <tbody id="table">
             </tbody>
         </table>
@@ -237,6 +241,7 @@
             res.text().then(text => {
                 const table = $('table')
                 list = JSON.parse(text)
+                $('count').innerHTML = `${list.length}개`
                 renderList(table, list)
             })
         })
