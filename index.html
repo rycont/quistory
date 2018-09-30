@@ -233,7 +233,7 @@
             })
         }
         let list
-        fetch('http://localhost:1337/question').then(res => {
+        fetch('http://wjdgks1224.iptime.org:1337/question').then(res => {
             res.text().then(text => {
                 const table = $('table')
                 list = JSON.parse(text)
