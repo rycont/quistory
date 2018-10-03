@@ -226,7 +226,7 @@
             el.innerHTML = ''
             arr.forEach(element => {
                 el.innerHTML +=
-                    `<tr>
+                    `<tr ondblclick="remove(this)" id="${element.id}">
                     <td>${element.author}</td>
                     <td>${element.question}</td>
                     <td>${element.answer}</td>
@@ -235,6 +235,15 @@
                     <td>${element.domain}</td>
                 </tr>`
             })
+        }
+        function remove(el) {
+            if(confirm('지우시겠습니까?')){
+                fetch(`http://wjdgks1224.iptime.org:1337/question/${el.id}`, {
+                    method: 'DELETE'
+                }).then(() => {
+                    location.reload()
+                })
+            }
         }
         let list
         fetch('http://wjdgks1224.iptime.org:1337/question').then(res => {
