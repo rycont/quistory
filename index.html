@@ -246,7 +246,7 @@
             }
         }
         let list
-        fetch('http://wjdgks1224.iptime.org:1337/question').then(res => {
+        fetch('http://wjdgks1224.iptime.org:1337/question?_limit=1000').then(res => {
             res.text().then(text => {
                 const table = $('table')
                 list = JSON.parse(text)
