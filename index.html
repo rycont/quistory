@@ -238,7 +238,7 @@
         }
         function remove(el) {
             if(confirm('지우시겠습니까?')){
-                fetch(`http://wjdgks1224.iptime.org:1337/question/${el.id}`, {
+                fetch(`http://jernon.iptime.org:1337/question/${el.id}`, {
                     method: 'DELETE'
                 }).then(() => {
                     location.reload()
@@ -246,7 +246,7 @@
             }
         }
         let list
-        fetch('http://wjdgks1224.iptime.org:1337/question?_limit=1000').then(res => {
+        fetch('http://jernon.iptime.org:1337/question?_limit=1000').then(res => {
             res.text().then(text => {
                 const table = $('table')
                 list = JSON.parse(text)
@@ -294,7 +294,7 @@
             }
             console.log(que)
             if (que.author && que.difficulty && que.domain && que.question && que.answer && que.type) {
-                fetch('http://wjdgks1224.iptime.org:1337/question', {
+                fetch('http://jernon.iptime.org:1337/question', {
                     method: 'post',
                     body: JSON.stringify(que),
                     headers: {
