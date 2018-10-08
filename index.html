@@ -231,11 +231,7 @@
             })
         }
         function remove(el) {
-<<<<<<< HEAD
             if (confirm('지우시겠습니까?')) {
-=======
-            if(confirm('지우시겠습니까?')){
->>>>>>> f8e9b84a79475e21afe030a59f25356896a989e8
                 fetch(`http://jernon.iptime.org:1337/question/${el.id}`, {
                     method: 'DELETE'
                 }).then(() => {
@@ -244,12 +240,8 @@
             }
         }
         let list
-<<<<<<< HEAD
         const author = prompt('출제자의 이름은 무엇인가요?')
         fetch(`http://jernon.iptime.org:1337/question?_limit=1000&author=${author}`).then(res => {
-=======
-        fetch('http://jernon.iptime.org:1337/question?_limit=1000').then(res => {
->>>>>>> f8e9b84a79475e21afe030a59f25356896a989e8
             res.text().then(text => {
                 const table = $('table')
                 list = JSON.parse(text)
