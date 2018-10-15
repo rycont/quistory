@@ -53,7 +53,9 @@
             border-radius: 7px;
         }
         #modal {
+            top: 1000px;
             display: none;
+            transition: 100ms;
         }
         #modal:target {
             background-color: rgba(0, 0, 0, 0.3);
@@ -62,6 +64,8 @@
             top: 0;
             position: fixed;
             display: block;
+            overflow-y: scroll;
+            transition: 100ms;
         }
         #modal:target #modalCon {
             background-color: white;
@@ -115,9 +119,8 @@
         }
         @media screen and (max-width: 1280px) {
             #modal #modalCon {
-                margin-top: 00px !important;
-                transform: scale(0.7)
-
+                margin-top: 0px !important;
+                box-sizing: border-box;
             }
         }
     </style>
@@ -135,6 +138,8 @@
             <p>문제: 글자수의 제한 없이 적어주세요. 줄 바꿈 가능합니다. 객관식이라면 문항도 적어주세요.</p>
             <p>정답: 주관식이면 답을 적어주시고, OX라면 O혹은 X, 객관식이면 답 번호만 적어주시면 됩니다.</p>
             <p>문제 중복에 유의해주세요</p>
+            <p>주관식은 단답형으로 '한 단어' 혹은 '누구나 떠올릴 수 있는 2~3단어'로 적어주세요</p>
+            <p>객관식은 사지선다로 </p>
             <form>
                 <span>난이도</span>
                 <p class="range-field">
@@ -236,20 +241,24 @@
                 fetch(`http://jernon.iptime.org:1337/question/${el.id}`, {
                     method: 'DELETE'
                 }).then(() => {
-                    location.reload()
+                    fetchData()
                 })
             }
         }
         let list
-        const author = prompt('출제자의 이름은 무엇인가요?')
-        fetch(`http://jernon.iptime.org:1337/question?_limit=1000&author=${author}`).then(res => {
-            res.text().then(text => {
-                const table = $('table')
-                list = JSON.parse(text)
-                $('count').innerHTML = `${author}님, ${list.length}개, ${Math.round((list.length * 50) / 1000) * 1000}원`
-                renderList(table, list)
+        const author = localStorage.getItem('author') ? localStorage.getItem('author') : prompt('출제자의 이름은 무엇인가요?')
+        localStorage.setItem('author', author)
+        function fetchData() {
+            fetch(`http://jernon.iptime.org:1337/question?_limit=1000&author=${author}`).then(res => {
+                res.text().then(text => {
+                    const table = $('table')
+                    list = JSON.parse(text)
+                    $('count').innerHTML = `${author}님, ${list.length}개, ${Math.round((list.length * 50) / 1000) * 1000}원`
+                    renderList(table, list)
+                })
             })
-        })
+        }
+        fetchData()
         const th = $('th')
         const alise = {
             저작권자: 'author',
@@ -297,7 +306,7 @@
                     }
                 }).then(() => {
                     $('close').click()
-                    location.reload()
+                    fetchData()
                 })
             }
         })
