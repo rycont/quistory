@@ -6,9 +6,6 @@ import Menu, { MenuItem, MenuDivider } from 'react-native-material-menu'
 import {CommentsList} from '../components/commentsList'
 
 class QuestionCard extends React.Component {
-    state = {
-        fullscreen: false
-    }
     setMenuRef = ref => {
         this._menu = ref
     }
@@ -20,54 +17,20 @@ class QuestionCard extends React.Component {
     showMenu = () => {
         this._menu.show()
     }
-    componentDidMount() {
-        BackHandler.addEventListener('hardwareBackPress', () => {
-            if(this.state.fullscreen) {
-                this.setState(() => ({
-                    fullscreen: false
-                }))
-                this.props.showTitlebar()
-                return true
-            }
-            return false
-        })
-    }
-    closeFullscreen = () => {
-        this.props.showTitlebar()
-        this.setState(() => ({
-            fullscreen: false
-        }))
-    }
-    openFullscreen = () => {
-        this.props.hideTitlebar()
-        this.setState(() => ({
-            fullscreen: true
-        }))
-    }
     render() {
         
         const {author, content, date, comments = [], metoo} = this.props
-        return <View style={[styles.questionCardContainer, this.state.fullscreen ? {
-            height: Dimensions.get('screen').height,
-            zIndex: 10,
-            position: 'absolute',
-            left: 0,
-            top: 0,
-            bottom: 0,
-            marginTop: 0
-        }: undefined]}>
+        return <View style={styles.questionCardContainer}>
             <BoxShadow setting={{
-                width: Dimensions.get('screen').width - (this.state.fullscreen ? 0 : 32),
-                height: this.state.fullscreen ? Dimensions.get('screen').height : 190,
+                width: Dimensions.get('screen').width - 32,
+                height: 190,
                 color: "#000",
                 border: 12,
                 radius: 20,
                 opacity: 0.05,
                 backgroundColor: 'white'
             }}>
-                <View style={[styles.questionCard, this.state.fullscreen ? {
-                    height: Dimensions.get('screen').height
-                } : undefined]}>
+                <View style={styles.questionCard}>
                     <View style={styles.questionBasicInfo}>
                         <Text style={styles.questionUploader}>{author}</Text>
                         <Text>{date}</Text>
@@ -88,19 +51,11 @@ class QuestionCard extends React.Component {
                                 </View>
                             </MenuItem>
                         </Menu>
-                        {
-                            this.state.fullscreen ? <TouchableNativeFeedback onPress={this.closeFullscreen}><Icon name="close" size={20} /></TouchableNativeFeedback> : undefined
-                        }
                     </View>
                     <TouchableNativeFeedback onLongPress={() => {
                         ToastAndroid.show('내용이 복사되었습니다', ToastAndroid.SHORT)
-                    }} onPress={this.openFullscreen}>
-                        <Text style={[styles.questionContent, this.state.fullscreen ? {
-                            letterSpacing: 0.5,
-                            lineHeight: 24,
-                        } : {
-                            flexBasis: 80
-                        }]}>
+                    }}>
+                        <Text style={styles.questionContent}>
                             {content}
                         </Text>
                     </TouchableNativeFeedback>
@@ -133,11 +88,6 @@ class QuestionCard extends React.Component {
                             </View>
                         </TouchableNativeFeedback>
                     </View>
-                    {
-                        this.state.fullscreen ?
-                        <CommentsList />
-                        : undefined
-                    }
                 </View>
             </BoxShadow>
         </View>
@@ -173,6 +123,7 @@ const styles = StyleSheet.create({
     questionContent: {
         color: '#202020',
         fontSize: 15,
+        flexBasis: 80
     },
     questionUploader: {
         color: '#707070',
