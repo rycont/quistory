@@ -14,31 +14,15 @@ export default (title) => (subtitle) => (Content) => {
                 y: scrolly
             }
         }}) => {
-            if(scrolly >= 2) {
-                if(this.state.isHeaderMinimized) return
-                console.log('축소', this.state.isHeaderMinimized)
-                Animated.timing(this.state.scrolly, {
-                    toValue: 50,
-                    duration: 500,
-                }).start()
-                this.setState(() => ({
-                    isHeaderMinimized: true
-                }))
-                return
-            }
-            if(!this.state.isHeaderMinimized) return
-            console.log('확대', this.state.isHeaderMinimized)
             Animated.timing(this.state.scrolly, {
-                toValue: 0,
-                duration: 500,
+                toValue: scrolly > 50 ? 50 : scrolly,
+                duration: 20,
+                easing: Easing.linear
             }).start()
-            this.setState(() => ({
-                isHeaderMinimized: false
-            }))
         }
         onWillFocus = () => {
             this.refs.scrollView.scrollTo({
-                x: 0,
+                x: 0,   
                 y: 0,
                 animated: true
             })
@@ -60,14 +44,14 @@ export default (title) => (subtitle) => (Content) => {
                     <Animated.View style={{
                         minHeight: 60,
                         elevation: this.state.scrolly.interpolate({
-                            inputRange: [0, 50],
+                            inputRange: [20, 50],
                             outputRange: [0, 3]
                         }),
                         backgroundColor: this.state.scrolly.interpolate({
                             inputRange: [0, 50],
                             outputRange: ['rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 1)']
                         }),
-                        display: this.state.hideTitle ? 'none' : 'flex',
+                        width: '100%',
                         position: 'absolute',
                         top: 0
                     }}>
@@ -75,30 +59,33 @@ export default (title) => (subtitle) => (Content) => {
                         {
                             fontSize: this.state.scrolly.interpolate({
                                 inputRange: [0, 50],
-                                outputRange: [27, subtitle ? 17 : 13]
+                                outputRange: [27, 17]
                             }),
                             opacity: subtitle ? this.state.scrolly.interpolate({
                                 inputRange: [0, 50],
                                 outputRange: [1, 0]
-                            }) : 1
+                            }) : 1,
                         }
                         ]}>
                             {title}
                         </Animated.Text>
                         {
-                            subtitle ? <Text style={[style.header, {
+                            subtitle ? <Animated.Text style={[style.header, {
                                 fontSize: 20,
                                 position: 'absolute',
                                 top: 0,
                                 height: 60,
-                                opacity: this.state.scrolly / 40
+                                opacity: this.state.scrolly.interpolate({
+                                    inputRange: [0, 50],
+                                    outputRange: [0, 1]
+                                }),
                             }]}>
                                 {subtitle}
-                            </Text> : undefined
+                            </Animated.Text> : undefined
                         }
                     </Animated.View>
                     <ScrollView onScroll={this.headerStyleControl} style={{
-                        top: 70
+                        top: 60
                     }} ref="scrollView">
                         <View style={style.container}>
                             <Content hideTitlebar={this.hideTitle} showTitlebar={this.showTitle} scrollHeight={this.refs.scrollView?.scrollHeight} />

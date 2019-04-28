@@ -5,7 +5,6 @@ import { QuestionCard } from '../components/questioncard'
 export default () => {
     let scrolly
     const QnaScreenWithData = withTitleAndContent('질문')(false)(({hideTitlebar, showTitlebar, scrollHeight}) => {
-        console.log(scrollHeight)
         return (<React.Fragment>
             <QuestionCard hideTitlebar={hideTitlebar} showTitlebar={showTitlebar} author="클리앙" content={`여기엔 트위터스러운 짧은 문구가 어울립니다.`} date="2019-04-11 13:41:26" />
             <QuestionCard hideTitlebar={hideTitlebar} showTitlebar={showTitlebar} author="클리앙" content={`1kg 정도 무게에 가벼운 게이밍이 가능한 14인치 노트북을 알아보던중 작년말에 출시한 ASUS 젠북 UX433FN 모델이 눈에 띄더라구요
