@@ -1,10 +1,7 @@
 import React from 'react'
-import {    Text, StyleSheet, View, Modal, Dimensions,
-            TouchableNativeFeedback, ToastAndroid,
-            TouchableWithoutFeedback } from 'react-native'
+import { Text, StyleSheet, View, Modal, Dimensions, TouchableNativeFeedback, ToastAndroid } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { BoxShadow } from 'react-native-shadow'
-import {MakeModal} from '../components/makeModal'
 
 class QuestionCard extends React.Component {
     setMenuRef = ref => {
@@ -18,18 +15,12 @@ class QuestionCard extends React.Component {
     showMenu = () => {
         this._menu.show()
     }
-    closeModal = () => {
-        this.setState(() => ({
-            modal: false
-        }))
-    }
     state = {
         modal: false
     }
     render() {
         const { author, content, date, comments = [], metoo, navigate } = this.props
         return <View style={styles.questionCardContainer}>
-            <MakeModal />
             <BoxShadow setting={{
                 width: Dimensions.get('screen').width - 32,
                 height: 190,
@@ -43,14 +34,17 @@ class QuestionCard extends React.Component {
                     <View style={styles.questionBasicInfo}>
                         <Text style={styles.questionUploader}>{author}</Text>
                         <Text>{date}</Text>
-                        <TouchableNativeFeedback onPress={() => makeModal(this.modalArea)} hitSlop={{
-                            top: 10,
-                            left: 10,
-                            bottom: 10,
-                            right: 10
-                        }}>
+                        <TouchableNativeFeedback onPress={() => this.setState({
+                            modal: true
+                        })}>
                             <Icon name="more-vert" size={20} style={styles.verticalDots} />
                         </TouchableNativeFeedback>
+                    </View>
+                    <View>
+                        <Modal visible={this.state.modal} animationType="slide"
+                            transparent={false}>
+                            <Text>나이스</Text>
+                        </Modal>
                     </View>
                     <TouchableNativeFeedback onLongPress={() => {
                         ToastAndroid.show('내용이 복사되었습니다', ToastAndroid.SHORT)
