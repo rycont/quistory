@@ -21,7 +21,7 @@ export default (title) => (subtitle) => (Content) => {
         onWillFocus = (event) => {
             if(event.action.type === 'Navigation/INIT' || event.action.type === 'Navigation/NAVIGATE') {
                 console.log('맨 위로!')
-                this.refs.scrollView.scrollTo({
+                this.scrollView.scrollTo({
                     x: 0,   
                     y: 0,
                     animated: true
@@ -34,14 +34,11 @@ export default (title) => (subtitle) => (Content) => {
                     <NavigationEvents onWillFocus={this.onWillFocus} />
                     <Animated.View style={{
                         minHeight: 60,
-                        elevation: this.state.scrolly.interpolate({
-                            inputRange: [20, 50],
-                            outputRange: [0, 3]
+                        borderBottomWidth: this.state.scrolly.interpolate({
+                            inputRange: [20, 50, Infinity],
+                            outputRange: [0, 1.3, 1.3],
                         }),
-                        backgroundColor: this.state.scrolly.interpolate({
-                            inputRange: [0, 50],
-                            outputRange: ['rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 1)']
-                        }),
+                        borderBottomColor: 'rgba(0, 0, 0, 0.2)',
                         width: '100%',
                         position: 'absolute',
                         top: 0
@@ -49,12 +46,12 @@ export default (title) => (subtitle) => (Content) => {
                         <Animated.Text style={[style.header,
                         {
                             fontSize: this.state.scrolly.interpolate({
-                                inputRange: [0, 50],
-                                outputRange: [27, 17]
+                                inputRange: [0, 50, Infinity],
+                                outputRange: [subtitle ? 27 : 37 , 17, 17]
                             }),
                             opacity: subtitle ? this.state.scrolly.interpolate({
-                                inputRange: [0, 50],
-                                outputRange: [1, 0]
+                                inputRange: [0, 50, Infinity],
+                                outputRange: [1, 0, 0]
                             }) : 1,
                         }
                         ]}>
@@ -67,21 +64,29 @@ export default (title) => (subtitle) => (Content) => {
                                 top: 0,
                                 height: 60,
                                 opacity: this.state.scrolly.interpolate({
-                                    inputRange: [0, 50],
-                                    outputRange: [0, 1]
+                                    inputRange: [0, 50, Infinity],
+                                    outputRange: [0, 1, 1]
                                 }),
                             }]}>
                                 {subtitle}
                             </Animated.Text> : undefined
                         }
                     </Animated.View>
-                    <ScrollView onScroll={this.headerStyleControl} style={{
-                        top: 60
-                    }} ref="scrollView">
+                    <Animated.ScrollView onScroll={Animated.event([{
+                        nativeEvent: {
+                            contentOffset: {
+                                y: this.state.scrolly
+                            }
+                        }
+                    }], {
+                        
+                    })} style={{
+                        top: 62
+                    }} ref={ref => this.scrollView = ref._component}>
                         <View style={style.container}>
                             <Content />
                         </View>
-                    </ScrollView>
+                    </Animated.ScrollView>
                 </View>
             )
         }
@@ -89,16 +94,16 @@ export default (title) => (subtitle) => (Content) => {
 }
 const style = StyleSheet.create({
     header: {
-        fontWeight: 'bold',
-        color: '#546D84',
+        fontWeight: '900',
         paddingLeft: 18,
         paddingTop: 18,
+        color: 'rgba(0, 0, 0, 0.9)'
     },
     container: {
         padding: 18,
     },
     cutNavArea: {
-        backgroundColor: '#F5FBFF',
+        backgroundColor: '#FAF9FA',
         paddingBottom: 60
     }
 })

@@ -13,7 +13,7 @@ const homeBottomNavigation = createMaterialBottomTabNavigator({
     screen: Home,
     navigationOptions: {
       tabBarIcon({ focused }) {
-        return <Icon name="home" size={25} color={focused ? '#747474' : '#C8C8C8'} />
+        return <Icon name="home" size={25} color={focused ? '#FAC564' : 'white'} />
       }
     },
   },
@@ -21,7 +21,7 @@ const homeBottomNavigation = createMaterialBottomTabNavigator({
     screen: QnaList,
     navigationOptions: {
       tabBarIcon({ focused }) {
-        return <Icon name="message" size={25} color={focused ? '#747474' : '#C8C8C8'} />
+        return <Icon name="message" size={25} color={focused ? '#FAC564' : 'white'} />
       }
     }
   },
@@ -29,15 +29,18 @@ const homeBottomNavigation = createMaterialBottomTabNavigator({
     screen: QnaList,
     navigationOptions: {
       tabBarIcon({ focused }) {
-        return <Icon name="person" size={25} color={focused ? '#747474' : '#C8C8C8'} />
+        return <Icon name="person" size={25} color={focused ? '#FAC564' : 'white'} />
       }
     }
   }
 }, {
-    initialRouteName: 'QnaList',
+    initialRouteName: 'Home',
     activeColor: '#f0edf6',
     inactiveColor: '#3e2465',
-    barStyle: { backgroundColor: 'white' },
+    barStyle: {
+      backgroundColor: '#344955',
+      elevation: 0
+    },
     labeled: false,
   })
 

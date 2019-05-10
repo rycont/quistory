@@ -8,6 +8,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { BoxShadow } from 'react-native-shadow'
 import { MakeModal } from '../components/makeModal'
+import { CardView } from '../components/cardView'
 import styled from 'styled-components/native'
 
 type Props = {
@@ -72,16 +73,12 @@ class QuestionCard extends Component<Props, State> {
         margin-left: 10;
         margin-right: 5;
         `
-        const Card = styled.View`
-        border: 1.3px solid rgba(0, 0, 0, 0.2);
-        border-radius: 12px;
-        `
-        return <View style={styles.questionCardContainer}>
+        return <View>
             <MakeModal items={this.state.modal} closeModal={() => this.setState(() => ({
                 modal: []
             }))} />
-            <Card>
-                <View style={styles.questionCard}>
+            <CardView render={() => (
+                <View>
                     <View style={styles.questionBasicInfo}>
                         <ProfileImage source={{
                             uri: author.profileImage
@@ -151,7 +148,7 @@ class QuestionCard extends Component<Props, State> {
                         </TouchableNativeFeedback>
                     </View>
                 </View>
-            </Card>
+            )} />
         </View>
 
     }
@@ -165,13 +162,6 @@ const styles = StyleSheet.create({
         width: 35,
         height: 35,
         marginRight: 10
-    },
-    questionCard: {
-        backgroundColor: 'white',
-        height: 190,
-        padding: 18,
-        borderRadius: 12,
-        display: 'flex'
     },
     questionBasicInfo: {
         display: 'flex',
