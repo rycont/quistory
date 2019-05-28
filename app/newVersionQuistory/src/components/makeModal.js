@@ -1,7 +1,13 @@
 import React, {useState} from 'react'
 import {Modal, TouchableWithoutFeedback, Text, StyleSheet, View, Dimensions, TouchableNativeFeedback} from 'react-native'
+import styled from 'styled-components/native'
 
 export const MakeModal = ({items, closeModal}) => {
+    const ModalItem = styled.Text`
+    color: black;
+    padding: 10px;
+    font-size: 13px;
+    `
     return items.length !== 0 ? <Modal
         visible={true}
         transparent={true}
@@ -12,7 +18,7 @@ export const MakeModal = ({items, closeModal}) => {
             <View style={{
                 backgroundColor: 'rgba(0, 0, 0, 0.4)',
                 height: Dimensions.get('window').height,
-                paddingTop: Dimensions.get('window').width - (33 * 4 + 20),
+                paddingTop: Dimensions.get('window').width - (33 * (items.length + 1) + 20),
             }}>
                 <View style={{
                     backgroundColor: 'white',
@@ -23,10 +29,10 @@ export const MakeModal = ({items, closeModal}) => {
                 }}>
                     {
                         items.map((v, i) => <TouchableNativeFeedback key={escape(v.label)} onPress={() => {
-                            v.action()
+                            v.action?.()
                             closeModal()
                         }}>
-                            <Text style={styles.modalItem}>{v.label}</Text>
+                            <ModalItem>{v.label}</ModalItem>
                         </TouchableNativeFeedback>)
                     }
                 </View>
@@ -34,10 +40,3 @@ export const MakeModal = ({items, closeModal}) => {
         </TouchableWithoutFeedback>
     </Modal> : null
 }
-const styles = StyleSheet.create({
-    modalItem: {
-        color: 'black',
-        padding: 10,
-        fontSize: 13
-    }
-})

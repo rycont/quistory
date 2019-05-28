@@ -1,8 +1,8 @@
 import React from 'react'
-import {View} from 'react-native'
+import { View } from 'react-native'
 import styled from 'styled-components/native'
 
-function CardView({render, innerPadding = true}) {
+function CardView({ render, innerPadding = true, styleMix = {} }) {
     const Container = styled.View`
         border: 1px solid rgba(0, 0, 0, 0.1);
         border-radius: 12px;
@@ -11,10 +11,10 @@ function CardView({render, innerPadding = true}) {
         background-color: white;
     `
     return (
-        <Container>
+        <Container style={styleMix}>
             {render()}
         </Container>
     )
 }
 
-export {CardView}
+export { CardView }

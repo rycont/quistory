@@ -1,4 +1,3 @@
-// @flow
 import React, { Component } from 'react'
 import {
     Text, StyleSheet, View, Modal, Dimensions,
@@ -6,30 +5,12 @@ import {
     TouchableWithoutFeedback, Image
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import { BoxShadow } from 'react-native-shadow'
 import { MakeModal } from '../components/makeModal'
 import { CardView } from '../components/cardView'
+import {PostBrief} from '../components/postBrief'
 import styled from 'styled-components/native'
 
-type Props = {
-    author: {
-        name: string,
-        profileImage: string,
-    },
-    content: string,
-    date: Date,
-    comments: Array<string>,
-    metoo: number,
-    navigate: any
-}
-type State = {
-    modal: Array<{
-        label: string,
-        action: function
-    }>
-}
-
-class QuestionCard extends Component<Props, State> {
+class QuestionCard extends Component {
     report() {
         alert('신고되었습니다(더미)')
     }
@@ -42,17 +23,17 @@ class QuestionCard extends Component<Props, State> {
     state = {
         modal: []
     }
-    get12HouredTime(hour: number) {
+    get12HouredTime(hour) {
         if (hour > 12) {
             return `오후 ${hour - 12}`
         }
         return `오전 ${hour}`
     }
-    formatDate = (date: Date) => {
+    formatDate = (date) => {
         return `${date.getFullYear() === new Date().getFullYear() ? '' : date.getFullYear() + '년'} ${date.getMonth() + 1}월 ${date.getDate()}일 ${this.get12HouredTime(date.getHours())}:${date.getMinutes()}`
     }
     render() {
-        const { author, content, date, comments = [], metoo, navigate } = this.props
+        const { author, content, date, comments, metoo, navigate } = this.props
         const ProfileImage = styled.Image`
         width: 30px;
         height: 30px;
@@ -68,16 +49,15 @@ class QuestionCard extends Component<Props, State> {
         const Content = styled.Text`
         color: #202020;
         font-size: 15;
-        `
-        const BottomIcon = styled(Icon)`
-        margin-left: 10;
-        margin-right: 5;
+        line-height: 25;
         `
         return <View>
             <MakeModal items={this.state.modal} closeModal={() => this.setState(() => ({
                 modal: []
             }))} />
-            <CardView render={() => (
+            <CardView styleMix={{
+                paddingTop: 12
+            }} render={() => (
                 <View>
                     <View style={styles.questionBasicInfo}>
                         <ProfileImage source={{
@@ -111,7 +91,7 @@ class QuestionCard extends Component<Props, State> {
                         navigate({
                             routeName: 'FullscreenCard',
                             params: {
-                                author, content, date, comments, metoo
+                                author, content, date: this.formatDate(date), comments, metoo
                             }
                         })
                     }}>
@@ -119,34 +99,7 @@ class QuestionCard extends Component<Props, State> {
                             {content.split('\n').join(' ')}
                         </Content>
                     </TouchableNativeFeedback>
-                    <View style={styles.questionBottomInfo}>
-                        <TouchableNativeFeedback onPress={() => {
-                            alert('GOOD')
-                        }}>
-                            <View style={{
-                                width: 50,
-                                display: 'flex',
-                                flexDirection: 'row'
-                            }}>
-                                <BottomIcon name="question-answer" size={20} style={{
-                                    marginLeft: 0
-                                }} />
-                                <Text>{comments.length}</Text>
-                            </View>
-                        </TouchableNativeFeedback>
-                        <TouchableNativeFeedback onPress={() => {
-                            alert('GOOD')
-                        }}>
-                            <View style={{
-                                width: 50,
-                                display: 'flex',
-                                flexDirection: 'row'
-                            }}>
-                                <BottomIcon name="live-help" size={20} />
-                                <Text>{metoo}</Text>
-                            </View>
-                        </TouchableNativeFeedback>
-                    </View>
+                    <PostBrief commentsAmount={comments?.length} metoo={metoo} />
                 </View>
             )} />
         </View>
@@ -176,11 +129,6 @@ const styles = StyleSheet.create({
         color: '#707070',
         fontWeight: '600',
         marginLeft: 10
-    },
-    questionBottomInfo: {
-        display: 'flex',
-        flexDirection: 'row',
-        marginTop: 20
     },
     verticalMiddle: {
         marginRight: 10

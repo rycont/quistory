@@ -1,4 +1,3 @@
-// @flow
 import React from 'react';
 import { Text, View, StyleSheet, Dimensions, ImageBackground, TouchableWithoutFeedback, Image } from 'react-native'
 import styled from 'styled-components/native'
@@ -6,12 +5,7 @@ import { BoxShadow } from 'react-native-shadow'
 import withTitleAndContent from '../components/basicScreen'
 import { CardView } from '../components/cardView'
 
-function NowProgressingCard({ profileImage, name, nowProgressing, percentage }: {
-    profileImage: string,
-    name: string,
-    nowProgressing: string,
-    percentage: number
-}) {
+function NowProgressingCard({ profileImage, name, nowProgressing, percentage }) {
     const Container = styled(CardView)`
     width: ${Dimensions.get('window').width - 32}px;
     height: 85px;
@@ -31,17 +25,34 @@ function NowProgressingCard({ profileImage, name, nowProgressing, percentage }: 
 }
 
 export default () => {
-    const ScreenWithTitleAndContent = withTitleAndContent(`test님,
-안녕하세요!`)('홈')(() => {
+    const ScreenWithTitleAndContent = withTitleAndContent('홈')(false)(() => {
         const CurrentUnit = styled.ImageBackground`
         height: ${Dimensions.get('window').width - 32};
-        border-radius: 12px;
         padding: 18px;
         `
+        const CurrentText = styled.Text`
+        color: white;
+        `
+        const CurrentStep = styled(CurrentText)`
+        font-size: 25px;
+        font-weight: 500;
+        `
+        const StartButton = styled.View`
+        border: 1px solid white;
+        width: 70px;
+        padding: 5px;
+        border-radius: 10px;
+        margin-top: 5px;
+        margin-left: 5px;
+        `
+        const Compete = styled.Text`
+        font-size: 25px;
+        margin-top: 23px;
+        color: black;
+        margin-bottom: 3px;
+        `
+
         return (<React.Fragment>
-            <View style={{
-                marginTop: 23
-            }}>
             <CardView style={{
                 color: "#000",
                 width: Dimensions.get('window').width - 32,
@@ -52,21 +63,22 @@ export default () => {
                 }}>
                     <View>
                         <CurrentUnit source={require('../assets/threeKingdomsAge.png')} imageStyle={{
-                            borderRadius: 13
+                            borderRadius: 12
                         }}>
-                            <Text style={style.mainCurrentProgressCardText}>삼국</Text>
-                            <Text style={[style.mainCurrentProgressCardText, style.mainCurrentProgressCardTitleText]}>삼국의 성립</Text>
-                            <View style={style.mainCurrentProgressCardStartButton}>
-                                <Text style={style.mainCurrentProgressCardText}>시작하기</Text>
-                            </View>
+                            <CurrentText>삼국</CurrentText>
+                            <CurrentStep>삼국의 성립</CurrentStep>
+                            <StartButton>
+                                <CurrentText>
+                                    시작하기
+                                </CurrentText>
+                            </StartButton>
                         </CurrentUnit>
                     </View>
                 </TouchableWithoutFeedback>
             )} />
-            </View>
-            <Text style={style.competeTitleText}>
+            <Compete>
                 경쟁
-        </Text>
+            </Compete>
             <NowProgressingCard
                 profileImage="https://lh3.googleusercontent.com/-KB04qOmj5ok/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3rdGk7TbeDVQTVmqlRSAak2j9vhi8A/"
                 name="김민규"
@@ -82,29 +94,6 @@ export default () => {
 }
 
 const style = StyleSheet.create({
-    mainCurrentProgressCardText: {
-        color: 'white'
-    },
-    mainCurrentProgressCardTitleText: {
-        fontSize: 25,
-        fontWeight: '500'
-    },
-    mainCurrentProgressCardStartButton: {
-        borderColor: 'white',
-        borderWidth: 1,
-        width: 70,
-        padding: 5,
-        borderRadius: 10,
-        marginTop: 5,
-        marginLeft: 5
-    },
-    competeTitleText: {
-        fontSize: 25,
-        marginTop: 10,
-        color: '#546D84',
-        zIndex: 1000,
-        marginBottom: 3
-    },
     mainCompeteOpponentCard: {
         display: 'flex',
         flexDirection: 'row'
