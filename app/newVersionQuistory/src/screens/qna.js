@@ -5,7 +5,7 @@ import { QuestionCard } from '../components/questioncard'
 export default ({navigation: {
     navigate
 }}) => {
-    const QnaScreenWithData = withTitleAndContent('질문')(false)(() => {
+    const QnaScreenWithData = withTitleAndContent('질문')(false)({})(() => {
         return (<React.Fragment>
             <QuestionCard navigate={navigate} author={{
                 name: '클리앙',

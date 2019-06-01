@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Home from './src/screens/home'
 import QnaList from './src/screens/qna'
 import FullscreenCard from './src/screens/fullscreenCard'
+import Setting from './src/screens/setting'
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { createAppContainer, createStackNavigator } from "react-navigation"
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs'
@@ -26,15 +27,16 @@ const homeBottomNavigation = createMaterialBottomTabNavigator({
     }
   },
   Setting: {
-    screen: QnaList,
+    screen: Setting,
     navigationOptions: {
       tabBarIcon({ focused }) {
         return <Icon name="person" size={25} color={focused ? '#FAC564' : 'white'} />
       }
     }
-  }
+  },
+  
 }, {
-    initialRouteName: 'QnaList',
+    initialRouteName: 'Setting',
     activeColor: '#f0edf6',
     inactiveColor: '#3e2465',
     barStyle: {
