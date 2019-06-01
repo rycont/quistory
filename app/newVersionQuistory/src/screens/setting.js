@@ -4,27 +4,49 @@ import styled from 'styled-components/native'
 import withTitleAndContent from '../components/basicScreen'
 
 export default () => {
-    const TitleText = styled.Text`
-        color: black;
-        font-size: 23px;
-    `
-    const SettingPageWithData = withTitleAndContent(headerAnimated => <Animated.View style={{
-        height: headerAnimated.interpolate({
-            inputRange: [0, 50, Infinity],
-            outputRange: [90, 70, 70]
-        }),
-        backgroundColor: '#F7F7F7'
-    }}>
-    <Image source={{
-        uri: 'https://cdn0.tnwcdn.com/wp-content/blogs.dir/1/files/2018/05/materialdesignfeat-796x398.jpg'
-    }} style={{
-        width: 20,
-        height: 20
-    }} />
-        <TitleText>
-            test님
-    </TitleText>
-    </Animated.View>
+    const SettingPageWithData = withTitleAndContent(headerAnimated =>
+        <Animated.View style={{
+            height: headerAnimated.interpolate({
+                inputRange: [0, 50, Infinity],
+                outputRange: [90, 70, 70]
+            }),
+            backgroundColor: '#F7F7F7',
+            display: 'flex',
+            flexDirection: 'row',
+            paddingTop: headerAnimated.interpolate({
+                inputRange: [0, 50, Infinity],
+                outputRange: [20, 15, 15]
+            }),
+            paddingLeft: 20
+        }}>
+            <Animated.Image source={{
+                uri: 'https://pbs.twimg.com/profile_images/899119956054335488/7KKkdNRo_400x400.jpg'
+            }} style={{
+                width: headerAnimated.interpolate({
+                    inputRange: [0, 50, Infinity],
+                    outputRange: [50, 40, 40]
+                }),
+                height: headerAnimated.interpolate({
+                    inputRange: [0, 50, Infinity],
+                    outputRange: [50, 40, 40]
+                }),
+                borderRadius: 60
+            }} />
+            <Animated.Text style={{
+                color: 'black',
+                fontSize: headerAnimated.interpolate({
+                    inputRange: [0, 50, Infinity],
+                    outputRange: [23, 20, 20]
+                }),
+                paddingTop: headerAnimated.interpolate({
+                    inputRange: [0, 50, Infinity],
+                    outputRange: [8, 3, 3]
+                }),
+                marginLeft: 10
+            }}>
+                test님
+            </Animated.Text>
+        </Animated.View>
     )(false)({
         height: [90, 70],
         shadow: false
