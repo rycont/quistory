@@ -1,84 +1,49 @@
-import React, { Component } from 'react'
-import {
-    Text, StyleSheet, View, Modal, Dimensions,
-    TouchableNativeFeedback, ToastAndroid,
-    TouchableWithoutFeedback, Image
-} from 'react-native'
+import React from 'react'
+import {    Text, StyleSheet, View, Modal, Dimensions,
+            TouchableNativeFeedback, ToastAndroid,
+            TouchableWithoutFeedback } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import { MakeModal } from '../components/makeModal'
-import { CardView } from '../components/cardView'
-import {PostBrief} from '../components/postBrief'
-import styled from 'styled-components/native'
+import { BoxShadow } from 'react-native-shadow'
+import {MakeModal} from '../components/makeModal'
 
-class QuestionCard extends Component {
-    report() {
-        alert('신고되었습니다(더미)')
+class QuestionCard extends React.Component {
+    setMenuRef = ref => {
+        this._menu = ref
     }
-    copy() {
-        ToastAndroid.showWithGravity('내용이 복사되었습니다', ToastAndroid.SHORT, ToastAndroid.TOP, 0, 100)
+
+    hideMenu = () => {
+        this._menu.hide()
     }
-    share() {
-        alert('신고되었습니다(더미)')
+
+    showMenu = () => {
+        this._menu.show()
+    }
+    closeModal = () => {
+        this.setState(() => ({
+            modal: false
+        }))
     }
     state = {
-        modal: []
-    }
-    get12HouredTime(hour) {
-        if (hour > 12) {
-            return `오후 ${hour - 12}`
-        }
-        return `오전 ${hour}`
-    }
-    formatDate = (date) => {
-        return `${date.getFullYear() === new Date().getFullYear() ? '' : date.getFullYear() + '년'} ${date.getMonth() + 1}월 ${date.getDate()}일 ${this.get12HouredTime(date.getHours())}:${date.getMinutes()}`
+        modal: false
     }
     render() {
-        const { author, content, date, comments, metoo, navigate } = this.props
-        const ProfileImage = styled.Image`
-        width: 30px;
-        height: 30px;
-        border-radius: 30px;
-        margin-top: 5px;
-        margin-right: 5px; 
-        `
-        const Uploder = styled.Text`
-        color: #707070;
-        font-weight: 600;
-        margin-left: 3px;
-        `
-        const Content = styled.Text`
-        color: #202020;
-        font-size: 15;
-        line-height: 25;
-        `
-        return <View>
-            <MakeModal items={this.state.modal} closeModal={() => this.setState(() => ({
-                modal: []
-            }))} />
-            <CardView styleMix={{
-                paddingTop: 12
-            }} render={() => (
-                <View>
+        const { author, content, date, comments = [], metoo, navigate } = this.props
+        return <View style={styles.questionCardContainer}>
+            <MakeModal />
+            <BoxShadow setting={{
+                width: Dimensions.get('screen').width - 32,
+                height: 190,
+                color: "#000",
+                border: 12,
+                radius: 20,
+                opacity: 0.05,
+                backgroundColor: 'white'
+            }}>
+                <View style={styles.questionCard}>
                     <View style={styles.questionBasicInfo}>
-                        <ProfileImage source={{
-                            uri: author.profileImage
-                        }} />
-                        <View>
-                            <Uploder>{author.name}</Uploder>
-                            <Text>{this.formatDate(date)}</Text>
-                        </View>
-                        <TouchableNativeFeedback onPress={() => this.setState(() => ({
-                            modal: [{
-                                label: '신고',
-                                action: this.report
-                            }, {
-                                label: '공유',
-                                action: this.share
-                            }, {
-                                label: '복사',
-                                action: this.copy
-                            }]
-                        }))} hitSlop={{
+                        <Text style={styles.questionUploader}>{author}</Text>
+                        <Text>{date}</Text>
+                        <TouchableNativeFeedback onPress={() => makeModal(this.modalArea)} hitSlop={{
                             top: 10,
                             left: 10,
                             bottom: 10,
@@ -87,21 +52,45 @@ class QuestionCard extends Component {
                             <Icon name="more-vert" size={20} style={styles.verticalDots} />
                         </TouchableNativeFeedback>
                     </View>
-                    <TouchableNativeFeedback onPress={() => {
-                        navigate({
-                            routeName: 'FullscreenCard',
-                            params: {
-                                author, content, date: this.formatDate(date), comments, metoo
-                            }
-                        })
+                    <TouchableNativeFeedback onLongPress={() => {
+                        ToastAndroid.show('내용이 복사되었습니다', ToastAndroid.SHORT)
+                        navigate('FullscreenCard')
                     }}>
-                        <Content numberOfLines={2}>
-                            {content.split('\n').join(' ')}
-                        </Content>
+                        <Text style={styles.questionContent}>
+                            {content}
+                        </Text>
                     </TouchableNativeFeedback>
-                    <PostBrief commentsAmount={comments?.length} metoo={metoo} />
+                    <View style={styles.questionBottomInfo}>
+                        <TouchableNativeFeedback onPress={() => {
+                            alert('GOOD')
+                        }}>
+                            <View style={{
+                                width: 50,
+                                display: 'flex',
+                                flexDirection: 'row'
+                            }}>
+                                <Icon name="question-answer" size={20} style={[styles.questionBottomIcons, {
+                                    marginLeft: 0
+                                }]} />
+                                <Text>{comments.length}</Text>
+                            </View>
+                        </TouchableNativeFeedback>
+                        <TouchableNativeFeedback onPress={() => {
+                            alert('GOOD')
+                        }}>
+                            <View style={{
+                                width: 50,
+                                display: 'flex',
+                                flexDirection: 'row'
+                            }}>
+
+                                <Icon name="live-help" size={20} style={styles.questionBottomIcons} />
+                                <Text>{metoo}</Text>
+                            </View>
+                        </TouchableNativeFeedback>
+                    </View>
                 </View>
-            )} />
+            </BoxShadow>
         </View>
 
     }
@@ -116,6 +105,13 @@ const styles = StyleSheet.create({
         height: 35,
         marginRight: 10
     },
+    questionCard: {
+        backgroundColor: 'white',
+        height: 190,
+        padding: 18,
+        borderRadius: 12,
+        display: 'flex'
+    },
     questionBasicInfo: {
         display: 'flex',
         flexDirection: 'row',
@@ -125,10 +121,24 @@ const styles = StyleSheet.create({
         flex: 1,
         textAlign: 'right'
     },
+    questionContent: {
+        color: '#202020',
+        fontSize: 15,
+        flexBasis: 80
+    },
     questionUploader: {
         color: '#707070',
         fontWeight: '600',
-        marginLeft: 10
+        marginRight: 10
+    },
+    questionBottomInfo: {
+        display: 'flex',
+        flexDirection: 'row',
+        marginTop: 20
+    },
+    questionBottomIcons: {
+        marginLeft: 10,
+        marginRight: 5
     },
     verticalMiddle: {
         marginRight: 10

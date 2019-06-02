@@ -1,91 +1,102 @@
 import React from 'react'
 import { StyleSheet, ScrollView, View, Text, Animated, Easing } from 'react-native'
 import { NavigationEvents } from "react-navigation"
-import styled from 'styled-components/native'
 
-export default (Title) => (subtitle) => (headerConfig) => (Content) => {
+export default (title) => (subtitle) => (Content) => {
     return class extends React.Component {
         state = {
             scrolly: new Animated.Value(0),
+            hideTitle: Boolean(false),
+            isHeaderMinimized: Boolean(false)
         }
-        headerStyleControl = ({ nativeEvent: {
+        headerStyleControl = ({nativeEvent: {
             contentOffset: {
                 y: scrolly
             }
-        } }) => {
+        }}) => {
             Animated.timing(this.state.scrolly, {
-                toValue: scrolly > 10 ? 50 : 0,
-                duration: 200,
-                easing: Easing.out(Easing.quad)
+                toValue: scrolly > 50 ? 50 : scrolly,
+                duration: 40,
             }).start()
         }
-        onWillFocus = (event) => {
-            if (Title !== '홈' && event.action.type === 'Navigation/BACK') return
-            console.log('맨 위로!\n')
-            this.scrollView.scrollTo({
-                x: 0,
+        onWillFocus = () => {
+            this.refs.scrollView.scrollTo({
+                x: 0,   
                 y: 0,
                 animated: true
             })
         }
         render() {
-            const Container = styled.View`
-            background-color: white;
-            padding-bottom: 60px;
-            `
-            const ContentContainer = styled.View`
-            padding: 5px 18px 18px 18px;
-            `
-            const defaultedHeaderConfig = Object.assign({
-                shadow: true,
-                height: []
-            }, headerConfig)
             return (
-                <Container>
+                <View style={style.cutNavArea}>
                     <NavigationEvents onWillFocus={this.onWillFocus} />
                     <Animated.View style={{
                         minHeight: 60,
-                        borderBottomWidth: defaultedHeaderConfig.shadow ? this.state.scrolly.interpolate({
-                            inputRange: [0, 50, Infinity],
-                            outputRange: [0, 1.3, 1.3],
-                        }) : 0,
-                        borderBottomColor: 'rgba(0, 0, 0, 0.2)',
+                        elevation: this.state.scrolly.interpolate({
+                            inputRange: [20, 50],
+                            outputRange: [0, 3]
+                        }),
+                        backgroundColor: this.state.scrolly.interpolate({
+                            inputRange: [0, 50],
+                            outputRange: ['rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 1)']
+                        }),
                         width: '100%',
+                        position: 'absolute',
+                        top: 0
                     }}>
-                        {typeof Title == 'string' ? <Animated.Text style={[style.header,
+                        <Animated.Text style={[style.header,
                         {
                             fontSize: this.state.scrolly.interpolate({
-                                inputRange: [0, 50, Infinity],
-                                outputRange: [23, 17, 17]
+                                inputRange: [0, 50],
+                                outputRange: [27, 17]
                             }),
+                            opacity: subtitle ? this.state.scrolly.interpolate({
+                                inputRange: [0, 50],
+                                outputRange: [1, 0]
+                            }) : 1,
                         }
-                        ]}>{Title}</Animated.Text> : Title(this.state.scrolly)}
+                        ]}>
+                            {title}
+                        </Animated.Text>
+                        {
+                            subtitle ? <Animated.Text style={[style.header, {
+                                fontSize: 20,
+                                position: 'absolute',
+                                top: 0,
+                                height: 60,
+                                opacity: this.state.scrolly.interpolate({
+                                    inputRange: [0, 50],
+                                    outputRange: [0, 1]
+                                }),
+                            }]}>
+                                {subtitle}
+                            </Animated.Text> : undefined
+                        }
                     </Animated.View>
-                    <Animated.ScrollView onScroll={Animated.event([{
-                        nativeEvent: {
-                            contentOffset: {
-                                y: this.state.scrolly
-                            }
-                        }
-                    }], {
-
-                        })} style={{
-                            //top: 62
-                        }} ref={ref => this.scrollView = ref._component}>
-                        <ContentContainer>
+                    <ScrollView onScroll={this.headerStyleControl} style={{
+                        top: 60
+                    }} ref="scrollView">
+                        <View style={style.container}>
                             <Content />
-                        </ContentContainer>
-                    </Animated.ScrollView>
-                </Container>
+                        </View>
+                    </ScrollView>
+                </View>
             )
         }
     }
 }
 const style = StyleSheet.create({
     header: {
-        fontWeight: '900',
+        fontWeight: 'bold',
+        color: '#546D84',
         paddingLeft: 18,
         paddingTop: 18,
-        color: 'rgba(0, 0, 0, 0.9)'
+    },
+    container: {
+        padding: 18,
+    },
+    cutNavArea: {
+        backgroundColor: '#F5FBFF',
+        paddingBottom: 60
     }
 })

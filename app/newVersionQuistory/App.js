@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import Home from './src/screens/home'
-import QnaList from './src/screens/qna'
-import FullscreenCard from './src/screens/fullscreenCard'
-import Setting from './src/screens/setting'
+import MyOnboard from './screens/onboardingScreen'
+import Home from './screens/home'
+import QnaList from './screens/qna'
+import FullscreenCard from './screens/fullscreenCard'
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { createAppContainer, createStackNavigator } from "react-navigation"
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs'
@@ -14,7 +14,7 @@ const homeBottomNavigation = createMaterialBottomTabNavigator({
     screen: Home,
     navigationOptions: {
       tabBarIcon({ focused }) {
-        return <Icon name="home" size={25} color={focused ? '#FAC564' : 'white'} />
+        return <Icon name="home" size={25} color={focused ? '#747474' : '#C8C8C8'} />
       }
     },
   },
@@ -22,50 +22,40 @@ const homeBottomNavigation = createMaterialBottomTabNavigator({
     screen: QnaList,
     navigationOptions: {
       tabBarIcon({ focused }) {
-        return <Icon name="message" size={25} color={focused ? '#FAC564' : 'white'} />
+        return <Icon name="message" size={25} color={focused ? '#747474' : '#C8C8C8'} />
+      },
+      tabBarVisible(...param) {
+        console.log(param)
+        return true
       }
     }
   },
   Setting: {
-    screen: Setting,
+    screen: QnaList,
     navigationOptions: {
       tabBarIcon({ focused }) {
-        return <Icon name="person" size={25} color={focused ? '#FAC564' : 'white'} />
+        return <Icon name="person" size={25} color={focused ? '#747474' : '#C8C8C8'} />
       }
     }
-  },
-  
+  }
 }, {
-    initialRouteName: 'Setting',
+    initialRouteName: 'QnaList',
     activeColor: '#f0edf6',
     inactiveColor: '#3e2465',
-    barStyle: {
-      backgroundColor: '#344955',
-      elevation: 0
-    },
+    barStyle: { backgroundColor: 'white' },
     labeled: false,
   })
 
 export default createAppContainer(
   createStackNavigator({
     HomeBottomNavigation: {
-      screen: homeBottomNavigation,
-      navigationOptions: {
-        header: null
-      },
+      screen: homeBottomNavigation
     },
     FullscreenCard: {
-      screen: FullscreenCard,
-      navigationOptions: {
-        title: '질문',
-        headerStyle: {
-          elevation: 0,
-          borderBottomWidth: 1.3,
-          borderBottomColor: 'rgba(0, 0, 0, 0.2)'
-        }
-      }
+      screen: FullscreenCard
     }
   }, {
-      initialRouteName: 'HomeBottomNavigation'
+      initialRouteName: 'HomeBottomNavigation',
+      headerMode: 'none'
     })
 )
