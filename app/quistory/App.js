@@ -36,7 +36,7 @@ const homeBottomNavigation = createMaterialBottomTabNavigator({
   },
   
 }, {
-    initialRouteName: 'Setting',
+    initialRouteName: 'QnaList',
     activeColor: '#f0edf6',
     inactiveColor: '#3e2465',
     barStyle: {

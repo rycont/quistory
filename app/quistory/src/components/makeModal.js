@@ -1,24 +1,24 @@
 import React, {useState} from 'react'
-import {Modal, TouchableWithoutFeedback, Text, StyleSheet} from 'react-native'
+import {Modal, TouchableWithoutFeedback, Text, StyleSheet, View, Dimensions, TouchableNativeFeedback} from 'react-native'
+import styled from 'styled-components/native'
 
-
-export const MakeModal = () => {
-    const [isVisible, setVisibleState] = useState(true)
-    return isVisible ? <Modal
-        visible={isVisible}
+export const MakeModal = ({items, closeModal}) => {
+    const ModalItem = styled.Text`
+    color: black;
+    padding: 10px;
+    font-size: 13px;
+    `
+    return items.length !== 0 ? <Modal
+        visible={true}
         transparent={true}
         animationType="fade"
-        onRequestClose={() => {
-            setVisibleState(false)
-        }}
+        onRequestClose={closeModal}
     >
-        <TouchableWithoutFeedback onPress={() => {
-            setVisibleState(false)
-        }}>
+        <TouchableWithoutFeedback onPress={closeModal}>
             <View style={{
-                backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                backgroundColor: 'rgba(0, 0, 0, 0.4)',
                 height: Dimensions.get('window').height,
-                paddingTop: Dimensions.get('window').width - (33 * 4 + 20),
+                paddingTop: Dimensions.get('window').width - (33 * (items.length + 1) + 20),
             }}>
                 <View style={{
                     backgroundColor: 'white',
@@ -27,19 +27,16 @@ export const MakeModal = () => {
                     borderRadius: 10,
                     padding: 10
                 }}>
-                    <Text style={styles.modalItem}>신고</Text>
-                    <Text style={styles.modalItem}>신고</Text>
-                    <Text style={styles.modalItem}>신고</Text>
-                    <Text style={styles.modalItem}>신고</Text>
+                    {
+                        items.map((v, i) => <TouchableNativeFeedback key={escape(v.label)} onPress={() => {
+                            v.action?.()
+                            closeModal()
+                        }}>
+                            <ModalItem>{v.label}</ModalItem>
+                        </TouchableNativeFeedback>)
+                    }
                 </View>
             </View>
         </TouchableWithoutFeedback>
-    </Modal> : undefined
+    </Modal> : null
 }
-StyleSheet.create({
-    modalItem: {
-        color: 'black',
-        padding: 10,
-        fontSize: 13
-    }
-})

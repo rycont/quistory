@@ -3,9 +3,8 @@ import { Text, Image, Animated, View } from 'react-native'
 import styled from 'styled-components/native'
 import withTitleAndContent from '../components/basicScreen'
 import SectionTitle from '../components/sectionTitle'
-import {QuestionCard} from '../components/questioncard'
-import ViewPager from 'react-native-viewpager'
-
+import { QuestionCard } from '../components/questioncard'
+import ViewPager from '@react-native-community/viewpager'
 
 function getMyPosts() {
     return [{
@@ -56,9 +55,9 @@ function getMyComment() {
     }]
 }
 
-export default ({navigation: {
+export default ({ navigation: {
     navigate
-}}) => {
+} }) => {
     const SettingPageWithData = withTitleAndContent(headerAnimated =>
         <Animated.View style={{
             height: headerAnimated.interpolate({
@@ -107,20 +106,20 @@ export default ({navigation: {
         height: [90, 70],
         shadow: false
     })(() => {
-        return <>
-        <SectionTitle>작성한 글</SectionTitle>
-        {getMyPosts().map((x, i) => <View key={encodeURI(x.content + i)}>
-            <QuestionCard {...x}
-            navigate={navigate}
-            briefly={true}
-            
-            style={{
-                flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center',
-            }} />
-        </View>)}
-        </>
+        return <View style={{
+            flex: 1
+        }}>
+            <SectionTitle>작성한 글</SectionTitle>
+            <Text>여기랑</Text>
+            <ViewPager initialPage={0} style={{ flex: 1 }}>
+                <View key={0}>
+                    <Text style={{
+                        flex: 1
+                    }}>뭐가</Text>
+                </View>
+            </ViewPager>
+            <Text>여기 사이</Text>
+        </View>
     })
     return <SettingPageWithData />
 }

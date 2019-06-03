@@ -57,7 +57,13 @@ throttlestop으로 CPU 전압을 -125mv 내리고 애프터버너로 GPU 클럭�
 둥둥 거리고 묵직한
 양감저음 입니다
 소니의 양감저음과는 다른
-젠하이저의 묵직함이 느껴집니다`} date={new Date()} metoo={283748} />
+젠하이저의 묵직함이 느껴집니다`} date={new Date()} metoo={283748} comments={[{
+    author: '댓글 저자',
+    content: '해보려고 인터넷을 뒤져가며 ASUS GPU Tweak,'
+}, {
+    author: '병림픽기자',
+    content: '병림픽의 현장입니다!'
+}]} />
 <QuestionCard navigate={navigate} author={{
                 name: '또율',
                 profileImage: 'http://image.musinsa.com/data/celeb/6570/6570_1_org.jpg'
