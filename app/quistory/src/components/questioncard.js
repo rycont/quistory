@@ -33,7 +33,7 @@ class QuestionCard extends Component {
         return `${date.getFullYear() === new Date().getFullYear() ? '' : date.getFullYear() + '년'} ${date.getMonth() + 1}월 ${date.getDate()}일 ${this.get12HouredTime(date.getHours())}:${date.getMinutes()}`
     }
     render() {
-        const { author, content, date, comments, metoo, navigate } = this.props
+        const { author, content, date, comments, metoo, navigate, briefly } = this.props
         const ProfileImage = styled.Image`
         width: 30px;
         height: 30px;

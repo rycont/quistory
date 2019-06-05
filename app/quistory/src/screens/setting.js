@@ -1,5 +1,5 @@
-import React from 'react'
-import { Text, Image, Animated, View } from 'react-native'
+import React, {useState} from 'react'
+import { Text, Image, Animated, View, ScrollView } from 'react-native'
 import styled from 'styled-components/native'
 import withTitleAndContent from '../components/basicScreen'
 import SectionTitle from '../components/sectionTitle'
@@ -45,7 +45,7 @@ function getMyPosts() {
     }]
 }
 
-function getMyComment() {
+function getMyComments() {
     return [{
         author: '댓글 저자',
         content: '해보려고 인터넷을 뒤져가며 ASUS GPU Tweak,'
@@ -55,10 +55,26 @@ function getMyComment() {
     }]
 }
 
+
 export default ({ navigation: {
     navigate
 } }) => {
+    const ChipButton = styled.Text`
+        padding-vertical: 7px;
+        padding-horizontal: 12px;
+        background-color: #344955;
+        color: #FEC864;
+        border-radius: 500px;
+        margin-right: 5px;
+    `
+    const ListIndexes = styled.View`
+        flex-direction: row;
+        padding-bottom: 10px;
+        padding-top: 20px;
+        padding-left: 15px;
+    `
     const SettingPageWithData = withTitleAndContent(headerAnimated =>
+        <>
         <Animated.View style={{
             height: headerAnimated.interpolate({
                 inputRange: [0, 50, Infinity],
@@ -102,23 +118,42 @@ export default ({ navigation: {
                 test님
             </Animated.Text>
         </Animated.View>
+        <ListIndexes>
+        <ChipButton>
+                스크랩
+            </ChipButton>
+            <ChipButton>
+                작성한 글
+            </ChipButton>
+        </ListIndexes>
+        </>
     )(false)({
         height: [90, 70],
-        shadow: false
     })(() => {
-        return <View style={{
-            flex: 1
-        }}>
-            <SectionTitle>작성한 글</SectionTitle>
-            <Text>여기랑</Text>
-            <ViewPager initialPage={0} style={{ flex: 1 }}>
-                <View key={0}>
-                    <Text style={{
-                        flex: 1
-                    }}>뭐가</Text>
+        const myPosts = getMyPosts()
+        const myComments = getMyComments()
+        const [viewpagerHeight, setViewpagerHeight] = useState(1000)
+
+        const autoHeightViewPager = ({nativeEvent: {layout: {height}}}) => {
+            if(height > viewpagerHeight) setViewpagerHeight(height)
+        }
+
+        return <View>
+            <ViewPager
+            initialPage={0}
+            style={{height: 7000}}
+            >
+                <View key={0} onLayout={autoHeightViewPager}>
+                    {getMyPosts().map(x => <QuestionCard
+                        {...{navigate}}
+                        briefly={true}
+                        key={escape(x.content)}
+                        {...x}/>)}
+                </View>
+                <View key={1} onLayout={autoHeightViewPager}>
+                    
                 </View>
             </ViewPager>
-            <Text>여기 사이</Text>
         </View>
     })
     return <SettingPageWithData />
