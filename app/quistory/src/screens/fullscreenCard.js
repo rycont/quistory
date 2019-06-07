@@ -89,7 +89,6 @@ class FullscreenCard extends React.Component {
         width: 40px;
         margin-left: 7px;
         `
-        let replyInputRef
         return (
             <>
                 <Background>
@@ -109,7 +108,7 @@ class FullscreenCard extends React.Component {
                                 }, {
                                     label: '공유'
                                 }, {
-                                    label: '공유'
+                                    label: '저장'
                                 }]}))}>
                                     <RightAlignedIcon name="more-vert" size={23} />
                                 </TouchableWithoutFeedback>

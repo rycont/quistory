@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, ScrollView, View, Text, Animated, Easing } from 'react-native'
+import { StyleSheet, ScrollView, View, Text, Animated, Easing, Dimensions } from 'react-native'
 import { NavigationEvents } from "react-navigation"
 import styled from 'styled-components/native'
 
@@ -19,19 +19,22 @@ export default (Title) => (subtitle) => (headerConfig) => (Content) => {
                 easing: Easing.out(Easing.quad)
             }).start()
         }
-        onWillFocus = (event) => {
-            if (Title !== '홈' && event.action.type === 'Navigation/BACK') return
-            console.log('맨 위로!\n')
+        goToTop = () => {
             this.scrollView.scrollTo({
                 x: 0,
                 y: 0,
                 animated: true
             })
         }
+        onWillFocus = (event) => {
+            if (Title !== '홈' && event.action.type === 'Navigation/BACK') return
+            this.goToTop()
+        }
         render() {
             const Container = styled.View`
             background-color: white;
-            padding-bottom: 60px;
+            padding-bottom: 79px;
+            min-height: ${Dimensions.get('window').height - 60};
             `
             const ContentContainer = styled.View`
             
@@ -70,12 +73,14 @@ export default (Title) => (subtitle) => (headerConfig) => (Content) => {
                     }], {
 
                         })}
-                        ref={ref => this.scrollView = ref._component}
+                        ref={ref => {
+                            this.scrollView = ref?._component
+                        }}
                         style={{
                             padding: 18,
                             paddingTop: 5,
                         }}>
-                            <Content />
+                            <Content goToTop={this.goToTop} />
                     </Animated.ScrollView>
                 </Container>
             )
