@@ -49,17 +49,18 @@ function getMyComments() {
     }]
 }
 
-
-export default ({ navigation: {
-    navigate
-} }) => {
+function ButtonsWithIndexes({indexes, activedNum}) {
     const ChipButton = styled.Text`
             padding-vertical: 7px;
             padding-horizontal: 12px;
-            background-color: #344955;
-            color: #FEC864;
+            border: 1px solid rgba(0, 0,  0, 0.7);
+            color: #344955;
             border-radius: 500px;
             margin-right: 5px;
+        `
+    const ActiveChipButton = styled(ChipButton)`
+            background-color: #344955;
+            color: #FEC864;
         `
     const ListIndexes = styled.View`
             flex-direction: row;
@@ -67,7 +68,17 @@ export default ({ navigation: {
             padding-top: 20px;
             padding-left: 15px;
         `
-    const SettingPageWithData = withTitleAndContent(headerAnimated => {
+    return <ListIndexes>
+        {indexes.map((label, index) => index === activedNum
+        ? <ActiveChipButton>{label}</ActiveChipButton>
+        : <ChipButton>{label}</ChipButton>)}
+    </ListIndexes>
+}
+
+export default ({ navigation: {
+    navigate
+} }) => {
+    const SettingPageWithData = withTitleAndContent((headerAnimated, commonState, setCommonState) => {
         return <>
             <Animated.View style={{
                 height: headerAnimated.interpolate({
@@ -112,40 +123,44 @@ export default ({ navigation: {
                     test님
             </Animated.Text>
             </Animated.View>
-            <ListIndexes>
-                <ChipButton>
-                    스크랩
-            </ChipButton>
-                <ChipButton>
-                    작성한 글
-            </ChipButton>
-            </ListIndexes>
+            <ButtonsWithIndexes indexes={['스크랩한 문제', '스크랩한 글', '작성한 글']} activedNum={0} />
         </>
     }
     )(false)({
         height: [90, 70],
+        shadow: false
     })(class extends React.Component {
         state = {
             viewpagerHeight: Number(1010100)
         }
         pagesHeight = []
+        setViewPagerHeight = (height) => {
+            this.props.goToTop()
+            setTimeout(() => {
+                if (height < Dimensions.get('window').height - 208.5) {
+                    this.setState(() => ({
+                        viewpagerHeight: Dimensions.get('window').height - 208.5
+                    }))
+                    return
+                }
+                this.setState(() => ({
+                    viewpagerHeight: height
+                }))
+            }, 100)
+        }
         pageSelected = ({ nativeEvent: { position } }) => {
-            this.setState(() => ({
-                viewpagerHeight: this.pagesHeight[position] + 90
-            }))
+            this.setViewPagerHeight(this.pagesHeight[position])
         }
         addPageHeight = ({ nativeEvent: { layout: { height } } }) => {
-            if(this.pagesHeight.length === 0) this.setState(() => ({
-                viewpagerHeight: height + 90
-            }))
+            if (this.pagesHeight.length === 0) this.setViewPagerHeight(height)
             this.pagesHeight = [...this.pagesHeight, height]
         }
         render() {
+            const { commonState, setCommonState } = this.props
             return <ViewPager
                 style={{ height: this.state.viewpagerHeight }}
                 pageMargin={20}
                 onPageSelected={this.pageSelected}
-                ref="pager"
             >
                 <View>
                     <View onLayout={this.addPageHeight}>
@@ -162,6 +177,45 @@ export default ({ navigation: {
                 </View>
                 <View>
                     <View onLayout={this.addPageHeight}>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
+                        <Text>테스트페이지</Text>
                         <Text>테스트페이지</Text>
                     </View>
                 </View>

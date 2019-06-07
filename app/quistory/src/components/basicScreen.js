@@ -33,7 +33,7 @@ export default (Title) => (subtitle) => (headerConfig) => (Content) => {
         render() {
             const Container = styled.View`
             background-color: white;
-            padding-bottom: 79px;
+            padding-bottom: 154px;
             min-height: ${Dimensions.get('window').height - 60};
             `
             const ContentContainer = styled.View`
@@ -62,7 +62,7 @@ export default (Title) => (subtitle) => (headerConfig) => (Content) => {
                                 outputRange: [23, 17, 17]
                             }),
                         }
-                        ]}>{Title}</Animated.Text> : Title(this.state.scrolly)}
+                        ]}>{Title}</Animated.Text> : Title(this.state.scrolly, this.state, this.setState)}
                     </Animated.View>
                     <Animated.ScrollView onScroll={Animated.event([{
                         nativeEvent: {
@@ -80,7 +80,7 @@ export default (Title) => (subtitle) => (headerConfig) => (Content) => {
                             padding: 18,
                             paddingTop: 5,
                         }}>
-                            <Content goToTop={this.goToTop} />
+                            <Content goToTop={this.goToTop} commonState={this.state} setCommonState={this.setState}/>
                     </Animated.ScrollView>
                 </Container>
             )
