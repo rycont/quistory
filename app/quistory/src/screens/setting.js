@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { Text, Image, Animated, View, ScrollView, YellowBox, Dimensions } from 'react-native'
+import { Text, Image, Animated, View, ScrollView, YellowBox, Dimensions, TouchableNativeFeedback } from 'react-native'
 import styled from 'styled-components/native'
 import withTitleAndContent from '../components/basicScreen'
 import SectionTitle from '../components/sectionTitle'
@@ -49,7 +49,11 @@ function getMyComments() {
     }]
 }
 
-function ButtonsWithIndexes({indexes, activedNum}) {
+function getScrapedPosts() {
+    return getMyPosts()
+}
+
+function ButtonsWithIndexes({ indexes, activedNum, onPress }) {
     const ChipButton = styled.Text`
             padding-vertical: 7px;
             padding-horizontal: 12px;
@@ -66,12 +70,13 @@ function ButtonsWithIndexes({indexes, activedNum}) {
             flex-direction: row;
             padding-bottom: 10px;
             padding-top: 20px;
-            padding-left: 15px;
         `
     return <ListIndexes>
-        {indexes.map((label, index) => index === activedNum
-        ? <ActiveChipButton>{label}</ActiveChipButton>
-        : <ChipButton>{label}</ChipButton>)}
+        {indexes.map((label, index) => <TouchableNativeFeedback key={encodeURI(label, index)} onPress={() => onPress(index, label)}>
+            {index === activedNum
+                ? <ActiveChipButton>{label}</ActiveChipButton>
+                : <ChipButton>{label}</ChipButton>}
+        </TouchableNativeFeedback>)}
     </ListIndexes>
 }
 
@@ -123,116 +128,75 @@ export default ({ navigation: {
                     test님
             </Animated.Text>
             </Animated.View>
-            <ButtonsWithIndexes indexes={['스크랩한 문제', '스크랩한 글', '작성한 글']} activedNum={0} />
         </>
     }
     )(false)({
         height: [90, 70],
         shadow: false
     })(class extends React.Component {
+        width = Dimensions.get('window').width - 36
+        pagerScreenHeight = Dimensions.get('window').height - 256
+        viewHeights = []
         state = {
-            viewpagerHeight: Number(1010100)
+            currentPage: Number(0),
+            scrollviewHeight: Number(1010100)
         }
-        pagesHeight = []
-        setViewPagerHeight = (height) => {
-            this.props.goToTop()
-            setTimeout(() => {
-                if (height < Dimensions.get('window').height - 208.5) {
-                    this.setState(() => ({
-                        viewpagerHeight: Dimensions.get('window').height - 208.5
-                    }))
-                    return
-                }
-                this.setState(() => ({
-                    viewpagerHeight: height
-                }))
-            }, 100)
+        setViewpagerHeight = (height) => {
+            const standard = height < this.pagerScreenHeight ? this.pagerScreenHeight : height
+            this.setState(() => ({
+                scrollviewHeight: standard + 30
+            }))
         }
-        pageSelected = ({ nativeEvent: { position } }) => {
-            this.setViewPagerHeight(this.pagesHeight[position])
+        dragControl = (e) => {
+            const currentPage = Math.round(e.nativeEvent.contentOffset.x / this.width)
+            const height = this.viewHeights[currentPage]
+            this.setViewpagerHeight(height)
+            this.setState(() => ({ currentPage }))
         }
-        addPageHeight = ({ nativeEvent: { layout: { height } } }) => {
-            if (this.pagesHeight.length === 0) this.setViewPagerHeight(height)
-            this.pagesHeight = [...this.pagesHeight, height]
+        clickedButton = (index) => {
+            this.refs.scrollViewPager.scrollTo({
+                x: index * this.width
+            })
+        }
+        autoHeight = ({ nativeEvent: { layout: { height } } }, i) => {
+            if(this.viewHeights.length === 0) this.setViewpagerHeight(height)
+            this.viewHeights[i] = height
         }
         render() {
-            const { commonState, setCommonState } = this.props
-            return <ViewPager
-                style={{ height: this.state.viewpagerHeight }}
-                pageMargin={20}
-                onPageSelected={this.pageSelected}
-            >
-                <View>
-                    <View onLayout={this.addPageHeight}>
-                        {
-                            getMyPosts().map((x, i) =>
-                                <QuestionCard
-                                    navigate={navigate}
-                                    briefly={true}
-                                    key={escape(x.content + i)}
-                                    {...x} />
-                            )
-                        }
-                    </View>
-                </View>
-                <View>
-                    <View onLayout={this.addPageHeight}>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                    </View>
-                </View>
-                <View>
-                    <View onLayout={this.addPageHeight}>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                    </View>
-                </View>
-                <View>
-                    <View onLayout={this.addPageHeight}>
-                        <Text>테스트페이지</Text>
-                        <Text>테스트페이지</Text>
-                    </View>
-                </View>
-            </ViewPager>
+            const PageItem = styled.View`
+                width: ${Dimensions.get('window').width - 36};
+            `
+
+            return <>
+                <ButtonsWithIndexes
+                    indexes={['스크랩한 문제', '스크랩한 글', '작성한 글']}
+                    activedNum={this.state.currentPage}
+                    onPress={this.clickedButton}
+                />
+                <ScrollView
+                    pagingEnabled={true}
+                    horizontal={true}
+                    ref="scrollViewPager"
+                    onScroll={this.dragControl}
+                    style={{
+                        height: this.state.scrollviewHeight
+                    }}>
+                    <PageItem>
+                        <View onLayout={(e) => this.autoHeight(e, 0)}>
+                            <Text>테스트이이이</Text>
+                        </View>
+                    </PageItem>
+                    <PageItem>
+                        <View onLayout={(e) => this.autoHeight(e, 1)}>
+                        {getScrapedPosts().map((x, i) => <QuestionCard {...x} navigate={navigate} key={encodeURI(x + i)} />)}
+                        </View>
+                    </PageItem>
+                    <PageItem>
+                        <View onLayout={(e) => this.autoHeight(e, 2)}>
+                            {getMyPosts().map((x, i) => <QuestionCard briefly {...x} navigate={navigate} key={encodeURI(x + i)} />)}
+                        </View>
+                    </PageItem>
+                </ScrollView></>
         }
     })
     return <SettingPageWithData />

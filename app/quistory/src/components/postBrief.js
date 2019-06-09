@@ -8,18 +8,20 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 
 
 export const PostBrief = ({
-    commentsAmount,
-    metoo
+    commentsAmount = 0,
+    metoo = 0,
+    briefly
 }) => {
     const IconButtonContainer = styled.View`
-    display: flex;
-    flex-direction: row;
-    margin-top: 20px;
+        display: flex;
+        flex-direction: row;
+        margin-top: ${briefly ? 10 : 20}px;
     `
     const BottomIcon = styled(Icon)`
-        margin-left: 10;
+        margin-left: ${briefly ? 3 : 10};
         margin-right: 5;
-        `
+    `
+    const iconSize = briefly ? 17 : 20
     return <IconButtonContainer>
         <TouchableNativeFeedback onPress={() => {
             alert('GOOD')
@@ -29,7 +31,7 @@ export const PostBrief = ({
                 display: 'flex',
                 flexDirection: 'row'
             }}>
-                <BottomIcon name="question-answer" size={20} style={{
+                <BottomIcon name="question-answer" size={iconSize} style={{
                     marginLeft: 0
                 }} />
                 <Text>{commentsAmount}</Text>
@@ -43,7 +45,7 @@ export const PostBrief = ({
                 display: 'flex',
                 flexDirection: 'row'
             }}>
-                <BottomIcon name="help" size={20} />
+                <BottomIcon name="help" size={iconSize} />
                 <Text>{metoo}</Text>
             </View>
         </TouchableNativeFeedback>

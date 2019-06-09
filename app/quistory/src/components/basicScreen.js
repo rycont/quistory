@@ -7,6 +7,9 @@ export default (Title) => (subtitle) => (headerConfig) => (Content) => {
     return class extends React.Component {
         state = {
             scrolly: new Animated.Value(0),
+            data: {
+                currentPage: Number(0)
+            }
         }
         headerStyleControl = ({ nativeEvent: {
             contentOffset: {
@@ -26,6 +29,9 @@ export default (Title) => (subtitle) => (headerConfig) => (Content) => {
                 animated: true
             })
         }
+        componentDidUpdate() {
+            console.log(this.state.data)
+        }
         onWillFocus = (event) => {
             if (Title !== '홈' && event.action.type === 'Navigation/BACK') return
             this.goToTop()
@@ -33,7 +39,7 @@ export default (Title) => (subtitle) => (headerConfig) => (Content) => {
         render() {
             const Container = styled.View`
             background-color: white;
-            padding-bottom: 154px;
+            padding-bottom: 79px;
             min-height: ${Dimensions.get('window').height - 60};
             `
             const ContentContainer = styled.View`
@@ -62,7 +68,11 @@ export default (Title) => (subtitle) => (headerConfig) => (Content) => {
                                 outputRange: [23, 17, 17]
                             }),
                         }
-                        ]}>{Title}</Animated.Text> : Title(this.state.scrolly, this.state, this.setState)}
+                        ]}>{Title}</Animated.Text> : Title(this.state.scrolly, this.state.data, (key, value) => this.setState(() => ({
+                            data: {
+                                [key]: value
+                            }
+                        })))}
                     </Animated.View>
                     <Animated.ScrollView onScroll={Animated.event([{
                         nativeEvent: {
@@ -74,13 +84,22 @@ export default (Title) => (subtitle) => (headerConfig) => (Content) => {
 
                         })}
                         ref={ref => {
-                            this.scrollView = ref?._component
+                            this.scrollView = ref ?._component
                         }}
                         style={{
                             padding: 18,
                             paddingTop: 5,
                         }}>
-                            <Content goToTop={this.goToTop} commonState={this.state} setCommonState={this.setState}/>
+                        <Content
+                            style={{paddingBottom: 18}}
+                            goToTop={this.goToTop}
+                            commonState={this.state.data}
+                            setCommonState={(key, value) => this.setState(() => ({
+                                data: {
+                                    [key]: value
+                                }
+                            }))}
+                        />
                     </Animated.ScrollView>
                 </Container>
             )

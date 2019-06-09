@@ -24,7 +24,7 @@ function NowProgressingCard({ profileImage, name, nowProgressing, percentage }) 
 }
 
 export default () => {
-    const ScreenWithTitleAndContent = withTitleAndContent('홈')(false)({})(() => {
+    const ScreenWithTitleAndContent = withTitleAndContent('홈')(false)({})(({style}) => {
         const CurrentUnit = styled.ImageBackground`
         height: ${Dimensions.get('window').width - 32};
         padding: 18px;
@@ -51,7 +51,7 @@ export default () => {
         margin-bottom: 3px;
         `
 
-        return (<React.Fragment>
+        return (<View style={style}>
             <CardView style={{
                 color: "#000",
                 width: Dimensions.get('window').width - 32,
@@ -85,7 +85,7 @@ export default () => {
                 percentage={0.7} />
             <NowProgressingCard profileImage="" name="이석민" nowProgressing="사림과 성리학" percentage={0.7} />
             <NowProgressingCard profileImage="" name="김민규" nowProgressing="사림과 성리학" percentage={0.7} />
-        </React.Fragment>)
+        </View>)
     })
     return (
         <ScreenWithTitleAndContent />

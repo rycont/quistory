@@ -34,6 +34,10 @@ class QuestionCard extends Component {
     }
     render() {
         const { author, content, date, comments, metoo, navigate, briefly } = this.props
+        function hideIfBriefly(component) {
+            if(briefly) return undefined
+            return component
+        }
         const ProfileImage = styled.Image`
         width: 30px;
         height: 30px;
@@ -51,6 +55,11 @@ class QuestionCard extends Component {
         font-size: 15;
         line-height: 25;
         `
+        const BasicInfo = styled.View`
+            display: flex;
+            flex-direction: row;
+            margin-bottom: ${briefly ? 7 : 15}px;
+        `
         return <View>
             <MakeModal items={this.state.modal} closeModal={() => this.setState(() => ({
                 modal: []
@@ -59,12 +68,12 @@ class QuestionCard extends Component {
                 paddingTop: 12
             }} render={() => (
                 <View>
-                    <View style={styles.questionBasicInfo}>
-                        <ProfileImage source={{
+                    <BasicInfo>
+                        {hideIfBriefly(<ProfileImage source={{
                             uri: author.profileImage
-                        }} />
+                        }} />)}
                         <View>
-                            <Uploder>{author.name}</Uploder>
+                            {!briefly ? <Uploder>{author.name}</Uploder> : undefined}
                             <Text>{this.formatDate(date)}</Text>
                         </View>
                         <TouchableNativeFeedback onPress={() => this.setState(() => ({
@@ -86,7 +95,7 @@ class QuestionCard extends Component {
                         }}>
                             <Icon name="more-vert" size={20} style={styles.verticalDots} />
                         </TouchableNativeFeedback>
-                    </View>
+                    </BasicInfo>
                     <TouchableNativeFeedback onPress={() => {
                         navigate({
                             routeName: 'FullscreenCard',
@@ -95,11 +104,11 @@ class QuestionCard extends Component {
                             }
                         })
                     }}>
-                        <Content numberOfLines={2}>
+                        <Content numberOfLines={briefly ? 1 : 2}>
                             {content.split('\n').join(' ')}
                         </Content>
                     </TouchableNativeFeedback>
-                    <PostBrief commentsAmount={comments?.length} metoo={metoo} />
+                    <PostBrief commentsAmount={comments?.length} metoo={metoo} briefly={briefly} />
                 </View>
             )} />
         </View>
@@ -115,11 +124,6 @@ const styles = StyleSheet.create({
         width: 35,
         height: 35,
         marginRight: 10
-    },
-    questionBasicInfo: {
-        display: 'flex',
-        flexDirection: 'row',
-        marginBottom: 15
     },
     verticalDots: {
         flex: 1,
