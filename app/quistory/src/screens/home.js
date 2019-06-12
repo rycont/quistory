@@ -24,7 +24,7 @@ function NowProgressingCard({ profileImage, name, nowProgressing, percentage }) 
 }
 
 export default () => {
-    const ScreenWithTitleAndContent = withTitleAndContent('홈')(false)({})(({style}) => {
+    const ScreenWithTitleAndContent = withTitleAndContent('홈')(false)()({})(({style}) => {
         const CurrentUnit = styled.ImageBackground`
         height: ${Dimensions.get('window').width - 32};
         padding: 18px;

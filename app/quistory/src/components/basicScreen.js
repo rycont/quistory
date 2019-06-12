@@ -1,9 +1,10 @@
 import React from 'react'
-import { StyleSheet, ScrollView, View, Text, Animated, Easing, Dimensions } from 'react-native'
+import { StyleSheet, ScrollView, View, Text, Animated, Easing, Dimensions, TouchableNativeFeedback } from 'react-native'
 import { NavigationEvents } from "react-navigation"
 import styled from 'styled-components/native'
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
-export default (Title) => (subtitle) => (headerConfig) => (Content) => {
+export default (Title) => (subtitle) => (icons = []) => (headerConfig) => (Content) => {
     return class extends React.Component {
         state = {
             scrolly: new Animated.Value(0),
@@ -42,8 +43,15 @@ export default (Title) => (subtitle) => (headerConfig) => (Content) => {
             padding-bottom: 79px;
             min-height: ${Dimensions.get('window').height - 60};
             `
-            const ContentContainer = styled.View`
-            
+            const IconsContainer = styled.View`
+            margin: 18px;
+            margin-right: 30px;
+            flex-direction: row-reverse;
+            flex: 1;
+            `
+            const TopIcon = styled(Icon)`
+                margin-right: 10px;
+                margin-top: 5px;
             `
             const defaultedHeaderConfig = Object.assign({
                 shadow: true,
@@ -51,6 +59,7 @@ export default (Title) => (subtitle) => (headerConfig) => (Content) => {
             }, headerConfig)
             return (
                 <Container>
+                    {/* 제목영역 */}
                     <NavigationEvents onWillFocus={this.onWillFocus} />
                     <Animated.View style={{
                         minHeight: 60,
@@ -60,6 +69,7 @@ export default (Title) => (subtitle) => (headerConfig) => (Content) => {
                         }) : 0,
                         borderBottomColor: 'rgba(0, 0, 0, 0.2)',
                         width: '100%',
+                        flexDirection: 'row'
                     }}>
                         {typeof Title == 'string' ? <Animated.Text style={[style.header,
                         {
@@ -73,7 +83,16 @@ export default (Title) => (subtitle) => (headerConfig) => (Content) => {
                                 [key]: value
                             }
                         })))}
+                        
+                        <IconsContainer>
+                        {icons.map(x => <TouchableNativeFeedback onPress={x.action} key={encodeURI()}>
+                            <TopIcon name={x.name} size={20} />
+                        </TouchableNativeFeedback>)}    
+                        </IconsContainer>
                     </Animated.View>
+                    
+                    {/* 본문영역 */}
+
                     <Animated.ScrollView onScroll={Animated.event([{
                         nativeEvent: {
                             contentOffset: {

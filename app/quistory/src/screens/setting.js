@@ -130,7 +130,7 @@ export default ({ navigation: {
             </Animated.View>
         </>
     }
-    )(false)({
+    )(false)()({
         height: [90, 70],
         shadow: false
     })(class extends React.Component {

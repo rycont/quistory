@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import Home from './src/screens/home'
 import QnaList from './src/screens/qna'
 import FullscreenCard from './src/screens/fullscreenCard'
 import Setting from './src/screens/setting'
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import NewQuestionEditor from './src/screens/newQuestionEditor'
+import Icon from 'react-native-vector-icons/MaterialIcons'
 import { createAppContainer, createStackNavigator } from "react-navigation"
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs'
 
@@ -36,7 +37,7 @@ const homeBottomNavigation = createMaterialBottomTabNavigator({
   },
   
 }, {
-    initialRouteName: 'Setting',
+    initialRouteName: 'QnaList',
     activeColor: '#f0edf6',
     inactiveColor: '#3e2465',
     barStyle: {

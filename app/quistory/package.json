@@ -18,6 +18,8 @@
     "react-native-paper": "^2.9.0",
     "react-native-swiper": "^1.5.14",
     "react-native-vector-icons": "^6.2.0",
+    "react-native-webview-bridge": "^0.40.1",
+    "react-native-zss-rich-text-editor": "^1.1.0",
     "react-navigation": "^3.1.2",
     "react-navigation-material-bottom-tabs": "^1.0.0",
     "styled-components": "^4.2.0"

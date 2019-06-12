@@ -6,7 +6,12 @@ import { QuestionCard } from '../components/questioncard'
 export default ({ navigation: {
     navigate
 } }) => {
-    const QnaScreenWithData = withTitleAndContent('질문')(false)({})(({ style }) => {
+    const QnaScreenWithData = withTitleAndContent('질문')(false)([{
+        name: 'create',
+        action: () => {
+            alert('좋습니다. 글을 등록하죠.')
+        }
+    }])({})(({ style }) => {
         return (<View style={style}>
             <QuestionCard navigate={navigate} author={{
                 name: '클리앙',
