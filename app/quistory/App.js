@@ -35,7 +35,7 @@ const homeBottomNavigation = createMaterialBottomTabNavigator({
       }
     }
   },
-  
+
 }, {
     initialRouteName: 'QnaList',
     activeColor: '#f0edf6',
@@ -58,15 +58,23 @@ export default createAppContainer(
     FullscreenCard: {
       screen: FullscreenCard,
       navigationOptions: {
-        title: '질문',
+        title: '질문'
+      }
+    },
+    NewQuestionEditor: {
+      screen: NewQuestionEditor,
+      navigationOptions: {
+        title: '새 질문'
+      }
+    }
+  }, {
+      initialRouteName: 'HomeBottomNavigation',
+      defaultNavigationOptions: {
         headerStyle: {
           elevation: 0,
           borderBottomWidth: 1.3,
           borderBottomColor: 'rgba(0, 0, 0, 0.2)'
         }
       }
-    }
-  }, {
-      initialRouteName: 'HomeBottomNavigation'
     })
 )

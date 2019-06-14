@@ -85,7 +85,12 @@ export default (Title) => (subtitle) => (icons = []) => (headerConfig) => (Conte
                         })))}
                         
                         <IconsContainer>
-                        {icons.map(x => <TouchableNativeFeedback onPress={x.action} key={encodeURI()}>
+                        {icons.map(x => <TouchableNativeFeedback onPress={x.action} key={encodeURI()} hitSlop={{
+                            top: 10,
+                            left: 10,
+                            right: 10,
+                            bottom: 10
+                        }}>
                             <TopIcon name={x.name} size={20} />
                         </TouchableNativeFeedback>)}    
                         </IconsContainer>

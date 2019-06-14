@@ -9,7 +9,7 @@ export default ({ navigation: {
     const QnaScreenWithData = withTitleAndContent('질문')(false)([{
         name: 'create',
         action: () => {
-            alert('좋습니다. 글을 등록하죠.')
+            navigate('NewQuestionEditor')
         }
     }])({})(({ style }) => {
         return (<View style={style}>
