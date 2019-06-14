@@ -7,19 +7,13 @@
     "test": "jest"
   },
   "dependencies": {
-    "@babel/plugin-proposal-decorators": "^7.4.4",
-    "@react-native-community/viewpager": "^1.1.7",
     "react": "16.8.3",
     "react-native": "0.59.5",
     "react-native-gesture-handler": "^1.2.1",
     "react-native-material-bottom-navigation": "^1.0.2",
-    "react-native-motion": "^1.0.2",
     "react-native-onboarding-swiper": "^0.10.0",
     "react-native-paper": "^2.9.0",
-    "react-native-swiper": "^1.5.14",
     "react-native-vector-icons": "^6.2.0",
-    "react-native-webview-bridge": "^0.40.1",
-    "react-native-zss-rich-text-editor": "^1.1.0",
     "react-navigation": "^3.1.2",
     "react-navigation-material-bottom-tabs": "^1.0.0",
     "styled-components": "^4.2.0"
