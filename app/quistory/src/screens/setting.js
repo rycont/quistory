@@ -4,8 +4,8 @@ import styled from 'styled-components/native'
 import withTitleAndContent from '../components/basicScreen'
 import SectionTitle from '../components/sectionTitle'
 import { QuestionCard } from '../components/questioncard'
-import ViewPager from '@react-native-community/viewpager'
 import { CommentsList } from '../components/commentsList'
+import Carousel from 'react-native-snap-carousel'
 
 function getMyPosts() {
     return [{
@@ -92,6 +92,7 @@ export default ({ navigation: {
                 }),
                 backgroundColor: '#F7F7F7',
                 display: 'flex',
+                width: '100%',
                 flexDirection: 'row',
                 paddingTop: headerAnimated.interpolate({
                     inputRange: [0, 50, Infinity],
@@ -134,69 +135,42 @@ export default ({ navigation: {
         height: [90, 70],
         shadow: false
     })(class extends React.Component {
-        width = Dimensions.get('window').width - 36
+        width = Dimensions.get('window').width
         pagerScreenHeight = Dimensions.get('window').height - 256
-        viewHeights = []
         state = {
-            currentPage: Number(0),
             scrollviewHeight: Number(1010100)
         }
-        setViewpagerHeight = (height) => {
-            const standard = height < this.pagerScreenHeight ? this.pagerScreenHeight : height
-            this.setState(() => ({
-                scrollviewHeight: standard + 30
-            }))
-        }
-        dragControl = (e) => {
-            const currentPage = Math.round(e.nativeEvent.contentOffset.x / this.width)
-            const height = this.viewHeights[currentPage]
-            this.setViewpagerHeight(height)
-            this.setState(() => ({ currentPage }))
-        }
-        clickedButton = (index) => {
-            this.refs.scrollViewPager.scrollTo({
-                x: index * this.width
-            })
-        }
-        autoHeight = ({ nativeEvent: { layout: { height } } }, i) => {
-            if(this.viewHeights.length === 0) this.setViewpagerHeight(height)
-            this.viewHeights[i] = height
+        renderCarouselItem = ({ item }) => {
+            const CarouselItem = styled.View`
+                width: ${this.width}px;
+                height: 500px;
+                padding: 18px;
+                padding-top: 0px;
+            `
+            return (
+                <CarouselItem>
+                    {item}
+                </CarouselItem>
+            )
         }
         render() {
-            const PageItem = styled.View`
-                width: ${Dimensions.get('window').width - 36};
-            `
-
-            return <>
-                <ButtonsWithIndexes
-                    indexes={['스크랩한 문제', '스크랩한 글', '작성한 글']}
-                    activedNum={this.state.currentPage}
-                    onPress={this.clickedButton}
-                />
-                <ScrollView
-                    pagingEnabled={true}
-                    horizontal={true}
-                    ref="scrollViewPager"
-                    onScroll={this.dragControl}
-                    style={{
-                        height: this.state.scrollviewHeight
-                    }}>
-                    <PageItem>
-                        <View onLayout={(e) => this.autoHeight(e, 0)}>
-                            <Text>테스트이이이</Text>
-                        </View>
-                    </PageItem>
-                    <PageItem>
-                        <View onLayout={(e) => this.autoHeight(e, 1)}>
+            return <Carousel
+                ref={c => this.carousel = c}
+                data={[
+                    (<Text>준비중</Text>),
+                    (<View>
                         {getScrapedPosts().map((x, i) => <QuestionCard {...x} navigate={navigate} key={encodeURI(x + i)} />)}
-                        </View>
-                    </PageItem>
-                    <PageItem>
-                        <View onLayout={(e) => this.autoHeight(e, 2)}>
-                            {getMyPosts().map((x, i) => <QuestionCard briefly {...x} navigate={navigate} key={encodeURI(x + i)} />)}
-                        </View>
-                    </PageItem>
-                </ScrollView></>
+                    </View>),
+                    (<View>
+                        {getMyPosts().map((x, i) => <QuestionCard {...x} navigate={navigate} key={encodeURI(x + i)} />)}
+                    </View>)]}
+                renderItem={this.renderCarouselItem}
+                itemWidth={this.width}
+                itemHeight={500}
+                sliderWidth={this.width}
+                sliderHeight={500}
+                inactiveSlideScale={1}
+                inactiveSlideOpacity={1} />
         }
     })
     return <SettingPageWithData />

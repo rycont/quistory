@@ -1,5 +1,5 @@
 import React from 'react'
-import {Text, View, TouchableNativeFeedback} from 'react-native'
+import {Text, View, TouchableNativeFeedback, Image} from 'react-native'
 import styled from 'styled-components/native'
 
 const Background = styled.View`
@@ -40,9 +40,6 @@ function CommentsList({
 
 function NoComments() {
     return <Background>
-        <Text>
-            악플보다 가슴 아픈건 무플입니다. 댓글을 달아보시겠어요?
-        </Text>
     </Background>
 }
 

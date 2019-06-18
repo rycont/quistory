@@ -90,7 +90,7 @@ class FullscreenCard extends React.Component {
         margin-left: 7px;
         `
         return (
-            <>
+            <>  
                 <Background>
                     <MakeModal items={this.state.modalItem} closeModal={() => this.setState(() => ({modalItem: []}))} />
                     <ScrollView>

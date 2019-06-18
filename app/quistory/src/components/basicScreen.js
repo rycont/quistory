@@ -69,7 +69,7 @@ export default (Title) => (subtitle) => (icons = []) => (headerConfig) => (Conte
                         }) : 0,
                         borderBottomColor: 'rgba(0, 0, 0, 0.2)',
                         width: '100%',
-                        flexDirection: 'row'
+                        flexDirection: 'row',
                     }}>
                         {typeof Title == 'string' ? <Animated.Text style={[style.header,
                         {
@@ -77,6 +77,7 @@ export default (Title) => (subtitle) => (icons = []) => (headerConfig) => (Conte
                                 inputRange: [0, 50, Infinity],
                                 outputRange: [23, 17, 17]
                             }),
+                            paddingTop: 19,
                         }
                         ]}>{Title}</Animated.Text> : Title(this.state.scrolly, this.state.data, (key, value) => this.setState(() => ({
                             data: {
@@ -111,7 +112,7 @@ export default (Title) => (subtitle) => (icons = []) => (headerConfig) => (Conte
                             this.scrollView = ref ?._component
                         }}
                         style={{
-                            padding: 18,
+                            padding: typeof Title === 'string' ? 18 : 0,
                             paddingTop: 5,
                         }}>
                         <Content

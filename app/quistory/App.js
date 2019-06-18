@@ -4,6 +4,8 @@ import QnaList from './src/screens/qna'
 import FullscreenCard from './src/screens/fullscreenCard'
 import Setting from './src/screens/setting'
 import NewQuestionEditor from './src/screens/newQuestionEditor'
+import Quiz from './src/screens/quiz'
+import withQuestions from './src/hocs/withQuestions'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { createAppContainer, createStackNavigator } from "react-navigation"
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs'
@@ -37,7 +39,7 @@ const homeBottomNavigation = createMaterialBottomTabNavigator({
   },
 
 }, {
-    initialRouteName: 'QnaList',
+    initialRouteName: 'Setting',
     activeColor: '#f0edf6',
     inactiveColor: '#3e2465',
     barStyle: {
@@ -65,6 +67,12 @@ export default createAppContainer(
       screen: NewQuestionEditor,
       navigationOptions: {
         title: '새 질문'
+      }
+    },
+    Quiz: {
+      screen: withQuestions(Quiz),
+      navigationOptions: {
+        header: null
       }
     }
   }, {

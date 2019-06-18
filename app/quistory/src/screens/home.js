@@ -23,7 +23,7 @@ function NowProgressingCard({ profileImage, name, nowProgressing, percentage }) 
     )
 }
 
-export default () => {
+export default ({navigation: {navigate}}) => {
     const ScreenWithTitleAndContent = withTitleAndContent('홈')(false)()({})(({style}) => {
         const CurrentUnit = styled.ImageBackground`
         height: ${Dimensions.get('window').width - 32};
@@ -58,7 +58,7 @@ export default () => {
                 height: Dimensions.get('window').width - 32,
             }} innerPadding={false} render={() => (
                 <TouchableWithoutFeedback onPress={() => {
-                    alert('GOOD!!!')
+                    navigate('Quiz')
                 }}>
                     <View>
                         <CurrentUnit source={require('../assets/threeKingdomsAge.png')} imageStyle={{
@@ -66,11 +66,11 @@ export default () => {
                         }}>
                             <CurrentText>삼국</CurrentText>
                             <CurrentStep>삼국의 성립</CurrentStep>
-                            <StartButton>
-                                <CurrentText>
-                                    시작하기
-                                </CurrentText>
-                            </StartButton>
+                                <StartButton>
+                                    <CurrentText>
+                                        시작하기
+                                    </CurrentText>
+                                </StartButton>
                         </CurrentUnit>
                     </View>
                 </TouchableWithoutFeedback>
