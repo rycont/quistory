@@ -114,7 +114,8 @@ export default (Title) => (subtitle) => (icons = []) => (headerConfig) => (Conte
                         style={{
                             padding: typeof Title === 'string' ? 18 : 0,
                             paddingTop: 5,
-                        }}>
+                        }}
+                        scrollEnabled>
                         <Content
                             style={{paddingBottom: 18}}
                             goToTop={this.goToTop}

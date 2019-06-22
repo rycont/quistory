@@ -5,7 +5,6 @@ import withTitleAndContent from '../components/basicScreen'
 import SectionTitle from '../components/sectionTitle'
 import { QuestionCard } from '../components/questioncard'
 import { CommentsList } from '../components/commentsList'
-import Carousel from 'react-native-snap-carousel'
 
 function getMyPosts() {
     return [{
@@ -53,33 +52,6 @@ function getScrapedPosts() {
     return getMyPosts()
 }
 
-function ButtonsWithIndexes({ indexes, activedNum, onPress }) {
-    const ChipButton = styled.Text`
-            padding-vertical: 7px;
-            padding-horizontal: 12px;
-            border: 1px solid rgba(0, 0,  0, 0.7);
-            color: #344955;
-            border-radius: 500px;
-            margin-right: 5px;
-        `
-    const ActiveChipButton = styled(ChipButton)`
-            background-color: #344955;
-            color: #FEC864;
-        `
-    const ListIndexes = styled.View`
-            flex-direction: row;
-            padding-bottom: 10px;
-            padding-top: 20px;
-        `
-    return <ListIndexes>
-        {indexes.map((label, index) => <TouchableNativeFeedback key={encodeURI(label, index)} onPress={() => onPress(index, label)}>
-            {index === activedNum
-                ? <ActiveChipButton>{label}</ActiveChipButton>
-                : <ChipButton>{label}</ChipButton>}
-        </TouchableNativeFeedback>)}
-    </ListIndexes>
-}
-
 export default ({ navigation: {
     navigate
 } }) => {
@@ -92,7 +64,6 @@ export default ({ navigation: {
                 }),
                 backgroundColor: '#F7F7F7',
                 display: 'flex',
-                width: '100%',
                 flexDirection: 'row',
                 paddingTop: headerAnimated.interpolate({
                     inputRange: [0, 50, Infinity],
@@ -135,42 +106,115 @@ export default ({ navigation: {
         height: [90, 70],
         shadow: false
     })(class extends React.Component {
-        width = Dimensions.get('window').width
+        width = Dimensions.get('window').width - 36
         pagerScreenHeight = Dimensions.get('window').height - 256
+        viewHeights = []
+        buttonActiveRange(i) {
+            return [
+                (i - 1) * this.width + this.width / 2,
+                (i - 1) * this.width + this.width / 2 + 1,
+                i * this.width,
+                (i + 1) * this.width - this.width / 2 - 1,
+                (i + 1) * this.width - this.width / 2]
+        }
         state = {
+            currentPage: new Animated.Value(0),
             scrollviewHeight: Number(1010100)
         }
-        renderCarouselItem = ({ item }) => {
-            const CarouselItem = styled.View`
-                width: ${this.width}px;
-                height: 500px;
-                padding: 18px;
-                padding-top: 0px;
-            `
-            return (
-                <CarouselItem>
-                    {item}
-                </CarouselItem>
-            )
+        ButtonsWithIndexes = ({ indexes, activedNum, onPress }) => {
+            const ChipButton = styled(Animated.Text)`
+                    padding-vertical: 7px;
+                    padding-horizontal: 12px;
+                    border: 1px solid rgba(0, 0,  0, 0.7);
+                    border-radius: 500px;
+                    margin-right: 5px;
+                `
+            const ListIndexes = styled.View`
+                    flex-direction: row;
+                    padding-bottom: 10px;
+                    padding-top: 20px;
+                `
+            return <ListIndexes>
+                {indexes.map((label, index) => <TouchableNativeFeedback onPress={() => onPress(index, label)}>
+                    <ChipButton style={{
+                        color: this.state.currentPage.interpolate({
+                            inputRange: this.buttonActiveRange(index),
+                            outputRange: ['#344955', '#FEC864', '#FEC864', '#FEC864', '#344955']
+                        }),
+                        backgroundColor: this.state.currentPage.interpolate({
+                            inputRange: this.buttonActiveRange(index),
+                            outputRange: ['#FFFFFF', '#344955', '#344955', '#344955', '#FFFFFF']
+                        })
+                    }}>{label}</ChipButton>
+                </TouchableNativeFeedback>)}
+            </ListIndexes>
+        }
+        setViewpagerHeight = (height) => {
+            const standard = height < this.pagerScreenHeight ? this.pagerScreenHeight : height
+            this.setState(() => ({
+                scrollviewHeight: standard + 30
+            }))
+        }
+         dragControl = (e) => {
+            const currentPage = Math.round(e.nativeEvent.contentOffset.x / this.width)
+            const height = this.viewHeights[currentPage]
+            this.setViewpagerHeight(height)
+        }
+        clickedButton = (index) => {
+            this.refs.scrollViewPager.scrollTo({
+                x: index * this.width
+            })
+        }
+        autoHeight = ({ nativeEvent: { layout: { height } } }, i) => {
+            if(this.viewHeights.length === 0) this.setViewpagerHeight(height)
+            this.viewHeights[i] = height
+        }
+        componentDidMount() {
+            this.state.currentPage.addListener(({value}) => console.log(value))
         }
         render() {
-            return <Carousel
-                ref={c => this.carousel = c}
-                data={[
-                    (<Text>준비중</Text>),
-                    (<View>
+            const PageItem = styled.View`
+                width: ${this.width};
+            `
+
+            return <View style={{ padding: 18 }}>
+                <this.ButtonsWithIndexes
+                    indexes={['스크랩한 문제', '스크랩한 글', '작성한 글']}
+                    activedNum={this.state.currentPage}
+                    onPress={this.clickedButton}
+                />
+                <ScrollView
+                    pagingEnabled={true}
+                    horizontal={true}
+                    ref="scrollViewPager"
+                    onScroll={Animated.event([{
+                        nativeEvent: {
+                            contentOffset: {
+                                x: this.state.currentPage
+                            }
+                        }
+                    }], {
+
+                        })}
+                    style={{
+                        height: this.state.scrollviewHeight
+                    }}>
+                    <PageItem>
+                        <View onLayout={(e) => this.autoHeight(e, 0)}>
+                            <Text>테스트이이이</Text>
+                        </View>
+                    </PageItem>
+                    <PageItem>
+                        <View onLayout={(e) => this.autoHeight(e, 1)}>
                         {getScrapedPosts().map((x, i) => <QuestionCard {...x} navigate={navigate} key={encodeURI(x + i)} />)}
-                    </View>),
-                    (<View>
-                        {getMyPosts().map((x, i) => <QuestionCard {...x} navigate={navigate} key={encodeURI(x + i)} />)}
-                    </View>)]}
-                renderItem={this.renderCarouselItem}
-                itemWidth={this.width}
-                itemHeight={500}
-                sliderWidth={this.width}
-                sliderHeight={500}
-                inactiveSlideScale={1}
-                inactiveSlideOpacity={1} />
+                        </View>
+                    </PageItem>
+                    <PageItem>
+                        <View onLayout={(e) => this.autoHeight(e, 2)}>
+                            {getMyPosts().map((x, i) => <QuestionCard briefly {...x} navigate={navigate} key={encodeURI(x + i)} />)}
+                        </View>
+                    </PageItem>
+                </ScrollView></View>
         }
     })
     return <SettingPageWithData />
