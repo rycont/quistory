@@ -30,9 +30,6 @@ export default (Title) => (subtitle) => (icons = []) => (headerConfig) => (Conte
                 animated: true
             })
         }
-        componentDidUpdate() {
-            console.log(this.state.data)
-        }
         onWillFocus = (event) => {
             if (Title !== '홈' && event.action.type === 'Navigation/BACK') return
             this.goToTop()

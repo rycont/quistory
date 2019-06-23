@@ -8,18 +8,28 @@ function NowProgressingCard({ profileImage, name, nowProgressing, percentage }) 
     const Container = styled(CardView)`
     width: ${Dimensions.get('window').width - 32}px;
     height: 85px;
+    flex-direction: row;
+    `
+    const HorizontalAlign = styled.View`
+    flex-direction: row;
+    `
+    const ProfileImage = styled.Image`
+    width: 45px;
+    height: 45px;
+    flex-basis: 45px;
+    border-radius: 30px;
     `
     return (
-        <Container render={() => <View style={style.mainCompeteOpponentCard}>
-            <Image source={{
+        <Container render={() => <HorizontalAlign>
+            <ProfileImage source={{
                 uri: profileImage || "http://res.heraldm.com/phpwas/restmb_jhidxmake.php?idx=5&simg=201812282006542884869_20181228200719_01.jpg"
-            }} style={style.mainCompeteOpponentCardProfileImage}></Image>
+            }} />
             <View style={style.mainCompeteOpponentCardText}>
                 <Text style={style.mainCompeteOpponentCardName}>{name}</Text>
                 <Text style={style.mainCompeteOpponentCardNowStudying}>{nowProgressing}</Text>
             </View>
             <Text style={style.mainCompeteOpponentCardProgress}>{percentage * 100}%</Text>
-        </View>} />
+        </HorizontalAlign>} />
     )
 }
 
@@ -93,16 +103,6 @@ export default ({navigation: {navigate}}) => {
 }
 
 const style = StyleSheet.create({
-    mainCompeteOpponentCard: {
-        display: 'flex',
-        flexDirection: 'row'
-    },
-    mainCompeteOpponentCardProfileImage: {
-        width: 45,
-        height: 45,
-        flexBasis: 45,
-        borderRadius: 30
-    },
     mainCompeteOpponentCardProgress: {
         flex: 1,
         textAlign: 'right'

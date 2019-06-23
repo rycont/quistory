@@ -39,7 +39,7 @@ const homeBottomNavigation = createMaterialBottomTabNavigator({
   },
 
 }, {
-    initialRouteName: 'Setting',
+    initialRouteName: 'Home',
     activeColor: '#f0edf6',
     inactiveColor: '#3e2465',
     barStyle: {
@@ -76,7 +76,7 @@ export default createAppContainer(
       }
     }
   }, {
-      initialRouteName: 'HomeBottomNavigation',
+      initialRouteName: 'Quiz',
       defaultNavigationOptions: {
         headerStyle: {
           elevation: 0,

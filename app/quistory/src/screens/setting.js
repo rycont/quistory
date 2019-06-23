@@ -69,7 +69,8 @@ export default ({ navigation: {
                     inputRange: [0, 50, Infinity],
                     outputRange: [20, 15, 15]
                 }),
-                paddingLeft: 20
+                paddingLeft: 20,
+                width: '100%'
             }}>
                 <Animated.Image source={{
                     uri: 'https://pbs.twimg.com/profile_images/899119956054335488/7KKkdNRo_400x400.jpg'
@@ -104,7 +105,6 @@ export default ({ navigation: {
     }
     )(false)()({
         height: [90, 70],
-        shadow: false
     })(class extends React.Component {
         width = Dimensions.get('window').width - 36
         pagerScreenHeight = Dimensions.get('window').height - 256
@@ -135,7 +135,7 @@ export default ({ navigation: {
                     padding-top: 20px;
                 `
             return <ListIndexes>
-                {indexes.map((label, index) => <TouchableNativeFeedback onPress={() => onPress(index, label)}>
+                {indexes.map((label, index) => <TouchableNativeFeedback onPress={() => onPress(index, label)} key={encodeURI(label + index)}>
                     <ChipButton style={{
                         color: this.state.currentPage.interpolate({
                             inputRange: this.buttonActiveRange(index),
@@ -152,11 +152,11 @@ export default ({ navigation: {
         setViewpagerHeight = (height) => {
             const standard = height < this.pagerScreenHeight ? this.pagerScreenHeight : height
             this.setState(() => ({
-                scrollviewHeight: standard + 30
+                scrollviewHeight: standard + 15
             }))
         }
-         dragControl = (e) => {
-            const currentPage = Math.round(e.nativeEvent.contentOffset.x / this.width)
+         dragControl = ({nativeEvent: {contentOffset: {x}}}) => {
+            const currentPage = Math.round(x / this.width)
             const height = this.viewHeights[currentPage]
             this.setViewpagerHeight(height)
         }
@@ -169,21 +169,19 @@ export default ({ navigation: {
             if(this.viewHeights.length === 0) this.setViewpagerHeight(height)
             this.viewHeights[i] = height
         }
-        componentDidMount() {
-            this.state.currentPage.addListener(({value}) => console.log(value))
-        }
         render() {
             const PageItem = styled.View`
                 width: ${this.width};
             `
 
-            return <View style={{ padding: 18 }}>
+            return <View style={{ padding: 18, paddingTop: 0 }}>
                 <this.ButtonsWithIndexes
                     indexes={['스크랩한 문제', '스크랩한 글', '작성한 글']}
                     activedNum={this.state.currentPage}
                     onPress={this.clickedButton}
                 />
                 <ScrollView
+                    showsHorizontalScrollIndicator={false}
                     pagingEnabled={true}
                     horizontal={true}
                     ref="scrollViewPager"
@@ -198,7 +196,8 @@ export default ({ navigation: {
                         })}
                     style={{
                         height: this.state.scrollviewHeight
-                    }}>
+                    }}
+                    onMomentumScrollEnd={this.dragControl}>
                     <PageItem>
                         <View onLayout={(e) => this.autoHeight(e, 0)}>
                             <Text>테스트이이이</Text>
