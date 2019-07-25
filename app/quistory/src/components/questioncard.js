@@ -66,7 +66,8 @@ class QuestionCard extends Component {
             }))} />
             <CardView styleMix={{
                 paddingTop: 12
-            }} render={() => (
+            }}>
+                
                 <View>
                     <BasicInfo>
                         {hideIfBriefly(<ProfileImage source={{
@@ -110,7 +111,8 @@ class QuestionCard extends Component {
                     </TouchableNativeFeedback>
                     <PostBrief commentsAmount={comments?.length} metoo={metoo} briefly={briefly} />
                 </View>
-            )} />
+            
+            </CardView>
         </View>
 
     }

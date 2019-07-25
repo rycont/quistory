@@ -76,7 +76,7 @@ export default createAppContainer(
       }
     }
   }, {
-      initialRouteName: 'Quiz',
+      initialRouteName: 'HomeBottomNavigation',
       defaultNavigationOptions: {
         headerStyle: {
           elevation: 0,

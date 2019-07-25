@@ -10,6 +10,7 @@ export default class extends React.Component {
     deviceWidth = Dimensions.get('window').width
     deviceHeight = Dimensions.get('window').height
     questionsQuentity = this.props.questions.length
+    onPressNext = () => this.carousel.snapToNext()
     render() {
         const Background = styled.View`
             background-color: #566E80;
@@ -20,7 +21,12 @@ export default class extends React.Component {
             <Background>
                 <Carousel
                     data={this.props.questions}
-                    renderItem={({item, index}) => <FlashCard item={item} index={index} length={this.props.questions.length} />}
+                    renderItem={({item, index}) =>
+                        <FlashCard
+                            item={item}
+                            index={index}
+                            length={this.props.questions.length}
+                            onPressNext={this.onPressNext}/>}
                     itemWidth={this.deviceWidth - 36}
                     itemHeight={this.deviceHeight}
                     inactiveSlideScale={0.95}

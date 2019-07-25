@@ -4,7 +4,7 @@ import styled from 'styled-components/native'
 import withTitleAndContent from '../components/basicScreen'
 import { CardView } from '../components/cardView'
 
-function NowProgressingCard({ profileImage, name, nowProgressing, percentage }) {
+function NowStudyingCard({ profileImage, name, nowStudying, percentage }) {
     const Container = styled(CardView)`
     width: ${Dimensions.get('window').width - 32}px;
     height: 85px;
@@ -19,17 +19,28 @@ function NowProgressingCard({ profileImage, name, nowProgressing, percentage }) 
     flex-basis: 45px;
     border-radius: 30px;
     `
+    const TextsContainer = styled.View`
+    padding-left: 10px;
+    `
+    const Name = styled.Text`
+    color: black;
+    font-size: 12;
+    opacity: 0.7;
+    `
+    const NowStudying = styled.Text`
+    color: black;
+    font-size: 17;
+    `
     return (
-        <Container render={() => <HorizontalAlign>
+        <Container><HorizontalAlign>
             <ProfileImage source={{
                 uri: profileImage || "http://res.heraldm.com/phpwas/restmb_jhidxmake.php?idx=5&simg=201812282006542884869_20181228200719_01.jpg"
             }} />
-            <View style={style.mainCompeteOpponentCardText}>
-                <Text style={style.mainCompeteOpponentCardName}>{name}</Text>
-                <Text style={style.mainCompeteOpponentCardNowStudying}>{nowProgressing}</Text>
-            </View>
-            <Text style={style.mainCompeteOpponentCardProgress}>{percentage * 100}%</Text>
-        </HorizontalAlign>} />
+            <TextsContainer>
+                <Name>{name}</Name>
+                <NowStudying>{nowStudying}</NowStudying>
+            </TextsContainer>
+        </HorizontalAlign></Container>
     )
 }
 
@@ -66,7 +77,7 @@ export default ({navigation: {navigate}}) => {
                 color: "#000",
                 width: Dimensions.get('window').width - 32,
                 height: Dimensions.get('window').width - 32,
-            }} innerPadding={false} render={() => (
+            }} innerPadding={false}>
                 <TouchableWithoutFeedback onPress={() => {
                     navigate('Quiz')
                 }}>
@@ -84,39 +95,20 @@ export default ({navigation: {navigate}}) => {
                         </CurrentUnit>
                     </View>
                 </TouchableWithoutFeedback>
-            )} />
+            </CardView>
             <Compete>
                 경쟁
             </Compete>
-            <NowProgressingCard
+            <NowStudyingCard
                 profileImage="https://lh3.googleusercontent.com/-KB04qOmj5ok/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3rdGk7TbeDVQTVmqlRSAak2j9vhi8A/"
                 name="김민규"
-                nowProgressing="사림과 성리학"
+                nowStudying="사림과 성리학"
                 percentage={0.7} />
-            <NowProgressingCard profileImage="" name="이석민" nowProgressing="사림과 성리학" percentage={0.7} />
-            <NowProgressingCard profileImage="" name="김민규" nowProgressing="사림과 성리학" percentage={0.7} />
+            <NowStudyingCard profileImage="" name="이석민" nowStudying="사림과 성리학" percentage={0.7} />
+            <NowStudyingCard profileImage="" name="김민규" nowStudying="사림과 성리학" percentage={0.7} />
         </View>)
     })
     return (
         <ScreenWithTitleAndContent />
     )
 }
-
-const style = StyleSheet.create({
-    mainCompeteOpponentCardProgress: {
-        flex: 1,
-        textAlign: 'right'
-    },
-    mainCompeteOpponentCardText: {
-        marginLeft: 10
-    },
-    mainCompeteOpponentCardNowStudying: {
-        fontSize: 17,
-        fontWeight: '300',
-        color: 'black'
-    },
-    mainCompeteOpponentCardName: {
-        fontSize: 12,
-        color: 'black'
-    }
-})
