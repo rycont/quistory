@@ -59,20 +59,14 @@ export const FlashCard = memo(({ item, index, length, onPressNext }) => {
         line-height: 30px;
     `
     const Comment = styled(Content)`
-        font-size: 15px
+        font-size: 15px;
     `
     const AnswerInput = styled.TextInput`
-    background-color: #96AABA;
-    align-self: center;
-    justify-content: center;
-    padding: 15px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    border-radius: 80px;
-    position: absolute;
-    bottom: -20px;
-    text-align: center;
-    color: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    margin-top: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
 `
     const SelectionsBox = styled.View`
     border: 1px solid rgba(0, 0, 0, 0.1);
@@ -96,10 +90,10 @@ export const FlashCard = memo(({ item, index, length, onPressNext }) => {
     const HorizontalAlign = styled.View`
         flex-direction: column;
     `
-    const checkAnswer = label => setState( (
-        item.type === 'OX' ? 
-        label === 'O' ? true : false :
-        item.selection.indexOf(label)
+    const checkAnswer = label => setState((
+        item.type === 'OX' ?
+            label === 'O' ? true : false :
+            item.selection.indexOf(label)
     ) == item.answer)
     const [AnimatePercentage, setAnimatePercentage] = useState(new Animated.Value(0))
     return <>
@@ -124,8 +118,8 @@ export const FlashCard = memo(({ item, index, length, onPressNext }) => {
                 </Examiner>
                 {questionState === null ? <QuestionType>({item.type})</QuestionType> : undefined}
                 <Content>{questionState === null ? item.content : `답: ${item.type === '4지선다' ? item.selection[item.answer] :
-                                                                         item.type === 'OX' ? item.answer ? 'O' : 'X':
-                                                                         item.answer}\n`}</Content>
+                    item.type === 'OX' ? item.answer ? 'O' : 'X' :
+                        item.answer}\n`}</Content>
                 {
                     questionState !== null ? <Content>{item.comment}</Content> : undefined
                 }
