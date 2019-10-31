@@ -8,7 +8,7 @@ const Comment = styled.View`
     `
 const Author = styled.Text`
     color: #202020;
-    font-weight: 700;
+    font-weight: bold;
     margin-bottom: 2px;
     `
 const Content = styled.Text`

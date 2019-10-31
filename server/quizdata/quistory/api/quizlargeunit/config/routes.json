@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/quizlargeunits",
+      "handler": "Quizlargeunit.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/quizlargeunits/count",
+      "handler": "Quizlargeunit.count",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/quizlargeunits/:id",
+      "handler": "Quizlargeunit.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/quizlargeunits",
+      "handler": "Quizlargeunit.create",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/quizlargeunits/:id",
+      "handler": "Quizlargeunit.update",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/quizlargeunits/:id",
+      "handler": "Quizlargeunit.delete",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

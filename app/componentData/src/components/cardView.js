@@ -2,7 +2,7 @@ import React from 'react'
 import { View } from 'react-native'
 import styled from 'styled-components/native'
 
-function CardView({ render, innerPadding = true, styleMix = {} }) {
+function CardView({ render, innerPadding = true, styleMix = {}, children }) {
     const Container = styled.View`
         border: 1px solid rgba(0, 0, 0, 0.1);
         border-radius: 12px;
@@ -12,7 +12,7 @@ function CardView({ render, innerPadding = true, styleMix = {} }) {
     `
     return (
         <Container style={styleMix}>
-            {render()}
+            {children}
         </Container>
     )
 }

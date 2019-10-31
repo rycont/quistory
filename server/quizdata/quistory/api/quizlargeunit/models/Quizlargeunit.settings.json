@@ -1,0 +1,24 @@
+{
+  "connection": "default",
+  "collectionName": "quizlargeunits",
+  "info": {
+    "name": "quizlargeunit",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "comment": ""
+  },
+  "attributes": {
+    "largeunit": {
+      "type": "string",
+      "unique": true,
+      "required": true
+    },
+    "quizsubunits": {
+      "collection": "quizsubunit",
+      "via": "quizlargeunit"
+    }
+  }
+}

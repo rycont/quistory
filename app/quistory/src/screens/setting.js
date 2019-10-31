@@ -1,220 +1,185 @@
-import React, { useState, useRef } from 'react'
-import { Text, Image, Animated, View, ScrollView, YellowBox, Dimensions, TouchableNativeFeedback } from 'react-native'
+import React, {useState, useEffect, useRef} from 'react'
+import {
+  Image,
+  View,
+  TouchableNativeFeedback,
+  Text,
+  SectionList,
+} from 'react-native'
 import styled from 'styled-components/native'
-import withTitleAndContent from '../components/basicScreen'
-import SectionTitle from '../components/sectionTitle'
-import { QuestionCard } from '../components/questioncard'
-import { CommentsList } from '../components/commentsList'
+import {gql} from 'apollo-boost'
+import {useQuery, useMutation} from 'react-apollo'
 
-function getMyPosts() {
-    return [{
-        author: {
-            name: '민규',
-            profileImage: 'http://image.musinsa.com/data/celeb/6570/6570_1_org.jpg'
-        },
-        content: '다시 시작처럼 조금 토라지더라도 서로가 서로에게 위안이 된다는 느낌으로 다시 시작처럼 나아가야지 나에게 너는 정말 큰 희망이라는 존재이니ㄴ까 부디 사라지지 말아줘',
-        date: new Date()
-    }, {
-        author: {
-            name: '민규',
-            profileImage: 'http://image.musinsa.com/data/celeb/6570/6570_1_org.jpg'
-        },
-        content: '다시 시작처럼 조금 토라지더라도 서로가 서로에게 위안이 된다는 느낌으로 다시 시작처럼',
-        date: new Date()
-    }, {
-        author: {
-            name: '민규',
-            profileImage: 'http://image.musinsa.com/data/celeb/6570/6570_1_org.jpg'
-        },
-        content: '다시 시작처럼 조금 토라지더라도 서로가 서로에게 위안이 된다는 느낌으로 다시 시작처럼',
-        date: new Date()
-    }, {
-        author: {
-            name: '민규',
-            profileImage: 'http://image.musinsa.com/data/celeb/6570/6570_1_org.jpg'
-        },
-        content: '다시 시작처럼 조금 토라지더라도 서로가 서로에게 위안이 된다는 느낌으로 다시 시작처럼',
-        date: new Date()
-    }]
-}
+const Profile = styled.View`
+  height: 90px;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: row;
+  padding-top: 20;
+  padding-left: 20;
+  width: 100%;
+`
 
-function getMyComments() {
-    return [{
-        author: '댓글 저자',
-        content: '해보려고 인터넷을 뒤져가며 ASUS GPU Tweak,'
-    }, {
-        author: '병림픽기자',
-        content: '병림픽의 현장입니다!'
-    }]
-}
+const ProfileImage = styled.Image`
+  width: 50px;
+  height: 50px;
+  border-radius: 60px;
+`
+const Name = styled.Text`
+color: black;
+font-size: 18px;
+padding-top: 10px;
+margin-left: 10px;
+font-weight: bold;
+`
 
-function getScrapedPosts() {
-    return getMyPosts()
-}
+const SectionHeader = styled.Text`
+  font-weight: bold;
+  font-size: 15px;
+  opacity: 0.7;
+  margin-left: 10px;
+  margin-top: 15px;
+  margin-bottom: 10px;
+`
 
-export default ({ navigation: {
-    navigate
-} }) => {
-    const SettingPageWithData = withTitleAndContent((headerAnimated, commonState, setCommonState) => {
-        return <>
-            <Animated.View style={{
-                height: headerAnimated.interpolate({
-                    inputRange: [0, 50, Infinity],
-                    outputRange: [90, 70, 70]
-                }),
-                backgroundColor: '#F7F7F7',
-                display: 'flex',
-                flexDirection: 'row',
-                paddingTop: headerAnimated.interpolate({
-                    inputRange: [0, 50, Infinity],
-                    outputRange: [20, 15, 15]
-                }),
-                paddingLeft: 20,
-                width: '100%'
-            }}>
-                <Animated.Image source={{
-                    uri: 'https://pbs.twimg.com/profile_images/899119956054335488/7KKkdNRo_400x400.jpg'
-                }} style={{
-                    width: headerAnimated.interpolate({
-                        inputRange: [0, 50, Infinity],
-                        outputRange: [50, 40, 40]
-                    }),
-                    height: headerAnimated.interpolate({
-                        inputRange: [0, 50, Infinity],
-                        outputRange: [50, 40, 40]
-                    }),
-                    borderRadius: 60
-                }} />
-                <Animated.Text style={{
-                    color: 'black',
-                    fontSize: headerAnimated.interpolate({
-                        inputRange: [0, 50, Infinity],
-                        outputRange: [18, 15, 15]
-                    }),
-                    paddingTop: headerAnimated.interpolate({
-                        inputRange: [0, 50, Infinity],
-                        outputRange: [10, 6, 6]
-                    }),
-                    marginLeft: 10,
-                    fontWeight: 'bold'
-                }}>
-                    test님
-            </Animated.Text>
-            </Animated.View>
-        </>
+const ListItem = styled.View`
+  background: #ffffff;
+  padding: 12px 20px 12px 20px;
+  flex-direction: row;
+  margin-top: 2px;
+`
+
+const ListText = styled.Text`
+  font-size: 15px;
+`
+
+const Counter = styled.Text`
+  font-weight: bold;
+  font-size: 15px;
+  opacity: 0.5;
+  flex: 1;
+  text-align: right;
+`
+
+const GET_USER_INFO = gql`
+query getUserInfo($userId: ID!) {
+  user(id: $userId) {
+    questions {
+      id
     }
-    )(false)()({
-        height: [90, 70],
-    })(class extends React.Component {
-        width = Dimensions.get('window').width - 36
-        pagerScreenHeight = Dimensions.get('window').height - 256
-        viewHeights = []
-        buttonActiveRange(i) {
-            return [
-                (i - 1) * this.width + this.width / 2,
-                (i - 1) * this.width + this.width / 2 + 1,
-                i * this.width,
-                (i + 1) * this.width - this.width / 2 - 1,
-                (i + 1) * this.width - this.width / 2]
-        }
-        state = {
-            currentPage: new Animated.Value(0),
-            scrollviewHeight: Number(1010100)
-        }
-        ButtonsWithIndexes = ({ indexes, activedNum, onPress }) => {
-            const ChipButton = styled(Animated.Text)`
-                    padding-vertical: 7px;
-                    padding-horizontal: 12px;
-                    border: 1px solid rgba(0, 0,  0, 0.7);
-                    border-radius: 500px;
-                    margin-right: 5px;
-                `
-            const ListIndexes = styled.View`
-                    flex-direction: row;
-                    padding-bottom: 10px;
-                    padding-top: 20px;
-                `
-            return <ListIndexes>
-                {indexes.map((label, index) => <TouchableNativeFeedback onPress={() => onPress(index, label)} key={encodeURI(label + index)}>
-                    <ChipButton style={{
-                        color: this.state.currentPage.interpolate({
-                            inputRange: this.buttonActiveRange(index),
-                            outputRange: ['#344955', '#FEC864', '#FEC864', '#FEC864', '#344955']
-                        }),
-                        backgroundColor: this.state.currentPage.interpolate({
-                            inputRange: this.buttonActiveRange(index),
-                            outputRange: ['#FFFFFF', '#344955', '#344955', '#344955', '#FFFFFF']
-                        })
-                    }}>{label}</ChipButton>
-                </TouchableNativeFeedback>)}
-            </ListIndexes>
-        }
-        setViewpagerHeight = (height) => {
-            const standard = height < this.pagerScreenHeight ? this.pagerScreenHeight : height
-            this.setState(() => ({
-                scrollviewHeight: standard + 15
-            }))
-        }
-         dragControl = ({nativeEvent: {contentOffset: {x}}}) => {
-            const currentPage = Math.round(x / this.width)
-            const height = this.viewHeights[currentPage]
-            this.setViewpagerHeight(height)
-        }
-        clickedButton = (index) => {
-            this.refs.scrollViewPager.scrollTo({
-                x: index * this.width
-            })
-        }
-        autoHeight = ({ nativeEvent: { layout: { height } } }, i) => {
-            if(this.viewHeights.length === 0) this.setViewpagerHeight(height)
-            this.viewHeights[i] = height
-        }
-        render() {
-            const PageItem = styled.View`
-                width: ${this.width};
-            `
+    comments(where: { question_null: false }) {
+      id
+      contents
+    }
+    metooed {
+      id
+    }
+    savedQuizs {
+      id
+    }
+    name
+    photo
+    id
+  }
+}
 
-            return <View style={{ padding: 18, paddingTop: 0 }}>
-                <this.ButtonsWithIndexes
-                    indexes={['스크랩한 문제', '스크랩한 글', '작성한 글']}
-                    activedNum={this.state.currentPage}
-                    onPress={this.clickedButton}
-                />
-                <ScrollView
-                    showsHorizontalScrollIndicator={false}
-                    pagingEnabled={true}
-                    horizontal={true}
-                    ref="scrollViewPager"
-                    onScroll={Animated.event([{
-                        nativeEvent: {
-                            contentOffset: {
-                                x: this.state.currentPage
-                            }
-                        }
-                    }], {
+`
 
-                        })}
-                    style={{
-                        height: this.state.scrollviewHeight
-                    }}
-                    onMomentumScrollEnd={this.dragControl}>
-                    <PageItem>
-                        <View onLayout={(e) => this.autoHeight(e, 0)}>
-                            <Text>테스트이이이</Text>
-                        </View>
-                    </PageItem>
-                    <PageItem>
-                        <View onLayout={(e) => this.autoHeight(e, 1)}>
-                        {getScrapedPosts().map((x, i) => <QuestionCard {...x} navigate={navigate} key={encodeURI(x + i)} />)}
-                        </View>
-                    </PageItem>
-                    <PageItem>
-                        <View onLayout={(e) => this.autoHeight(e, 2)}>
-                            {getMyPosts().map((x, i) => <QuestionCard briefly {...x} navigate={navigate} key={encodeURI(x + i)} />)}
-                        </View>
-                    </PageItem>
-                </ScrollView></View>
-        }
-    })
-    return <SettingPageWithData />
+export default ({navigation: {navigate}, userData = {}}) => {
+  const {data, loading, error} = useQuery(GET_USER_INFO, {
+    variables: {
+      userId: userData.data.user.id
+    } 
+  })
+  if(loading) return <></>
+  console.log('유저 데이터: ', data)
+  const SECTION_DATA = [
+    {
+      title: '문제 풀이',
+      data: [
+        {
+          text: '중요 표시 한 문제',
+          count: data.user.savedQuizs?.length,
+          action: 'UserSaved',
+        },
+      ],
+    },
+    {
+      title: '질문',
+      data: [
+        {
+          text: '작성한 질문',
+          count: data.user.questions?.length,
+          action: 'UserQuestions',
+        },
+        {
+          text: '작성한 댓글',
+          count: data.user.comments?.length,
+          action: 'UserComments',
+        },
+        {
+          text: '궁금해요 표시 한 질문',
+          count: data.user.metooed?.length,
+          action: 'UserMetooed',
+        },
+      ],
+    },
+  ]
+
+  return (
+    <>
+      <Profile>
+        <ProfileImage
+          source={{
+            uri: data.user.photo,
+          }}
+        />
+        <Name>
+          {data.user.name}님
+        </Name>
+      </Profile>
+      <View style={{backgroundColor: '#F2F2F2'}}>
+        <SectionList
+          sections={SECTION_DATA}
+          keyExtractor={e => e.text}
+          renderItem={({item: {text, count, action}, index, section}) => (
+            <TouchableNativeFeedback onPress={() => {
+              const nav = ({
+                UserSaved: 'QuizListView',
+                UserQuestions: 'QuestionListView',
+                UserComments: 'CommentListView',
+                UserMetooed: 'QuestionListView',
+              })[action]
+              navigate({
+                routeName: nav,
+                params: {
+                  title: text,
+                  userId: Number(data.user.id),
+                  userData
+                }
+              })
+            }}>
+              <ListItem
+                style={{
+                  ...(index === 0 && {
+                    borderTopLeftRadius: 12,
+                    borderTopRightRadius: 12,
+                  }),
+                  ...(section.data.length - 1 === index && {
+                    borderBottomLeftRadius: 12,
+                    borderBottomRightRadius: 12,
+                  }),
+                }}>
+                <ListText>{text}</ListText>
+                <Counter>{count || 0}개 ></Counter>
+              </ListItem>
+            </TouchableNativeFeedback>
+          )}
+          renderSectionHeader={({section: {title}}) => (
+            <SectionHeader>{title}</SectionHeader>
+          )}
+        />
+      </View>
+    </>
+  )
 }

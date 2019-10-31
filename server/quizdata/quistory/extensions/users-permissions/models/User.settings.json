@@ -1,0 +1,91 @@
+{
+  "connection": "default",
+  "collectionName": "users-permissions_user",
+  "info": {
+    "name": "user",
+    "description": ""
+  },
+  "options": {
+    "timestamps": [
+      "created_at",
+      "updated_at"
+    ]
+  },
+  "attributes": {
+    "username": {
+      "type": "string",
+      "minLength": 3,
+      "unique": true,
+      "configurable": false,
+      "required": true
+    },
+    "email": {
+      "type": "email",
+      "minLength": 6,
+      "configurable": false,
+      "required": true
+    },
+    "provider": {
+      "type": "string",
+      "configurable": false
+    },
+    "password": {
+      "type": "password",
+      "minLength": 6,
+      "configurable": false,
+      "private": true
+    },
+    "resetPasswordToken": {
+      "type": "string",
+      "configurable": false,
+      "private": true
+    },
+    "confirmed": {
+      "type": "boolean",
+      "default": false,
+      "configurable": false
+    },
+    "blocked": {
+      "type": "boolean",
+      "default": false,
+      "configurable": false
+    },
+    "role": {
+      "model": "role",
+      "via": "users",
+      "plugin": "users-permissions",
+      "configurable": false
+    },
+    "comments": {
+      "collection": "comment",
+      "via": "user"
+    },
+    "name": {
+      "type": "string"
+    },
+    "photo": {
+      "type": "string"
+    },
+    "questions": {
+      "collection": "question",
+      "via": "user"
+    },
+    "metooed": {
+      "collection": "question",
+      "via": "metoo",
+      "dominant": true
+    },
+    "nowStudying": {
+      "type": "integer",
+      "required": true,
+      "default": "1"
+    },
+    "savedQuizs": {
+      "collection": "quiz",
+      "via": "savedUser"
+    },
+    "friends": {
+      "type": "json"
+    }
+  }
+}

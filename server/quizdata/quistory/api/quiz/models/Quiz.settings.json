@@ -1,0 +1,53 @@
+{
+  "connection": "default",
+  "collectionName": "quizzes",
+  "info": {
+    "name": "quiz",
+    "description": "문제 내는 그거입니다"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": [
+      "created_at",
+      "updated_at"
+    ],
+    "comment": ""
+  },
+  "attributes": {
+    "examiner": {
+      "type": "string"
+    },
+    "type": {
+      "enum": [
+        "shortAnswer",
+        "multipleChoice",
+        "OX"
+      ],
+      "type": "enumeration"
+    },
+    "contents": {
+      "type": "string"
+    },
+    "comment": {
+      "type": "string"
+    },
+    "answer": {
+      "type": "string"
+    },
+    "otherAnswers": {
+      "type": "json"
+    },
+    "selections": {
+      "type": "json"
+    },
+    "quizsubunit": {
+      "model": "quizsubunit",
+      "via": "quizzes"
+    },
+    "savedUser": {
+      "model": "user",
+      "via": "savedQuizs",
+      "plugin": "users-permissions"
+    }
+  }
+}

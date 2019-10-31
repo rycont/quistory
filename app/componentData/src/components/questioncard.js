@@ -1,150 +1,196 @@
-import React from 'react'
-import {    Text, StyleSheet, View, Modal, Dimensions,
-            TouchableNativeFeedback, ToastAndroid,
-            TouchableWithoutFeedback } from 'react-native'
+import React, {useState} from 'react'
+import {
+  Text,
+  StyleSheet,
+  View,
+  Alert,
+  TouchableNativeFeedback,
+  ToastAndroid,
+} from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import { BoxShadow } from 'react-native-shadow'
-import {MakeModal} from '../components/makeModal'
+import {CardView} from '../components/cardView'
+import {PostBrief} from '../components/postBrief'
+import styled from 'styled-components/native'
+import pad from '../utils/pad'
+import Markdown from '@stream-io/react-native-simple-markdown'
+import {gql} from 'apollo-boost'
+import {useQuery, useMutation} from 'react-apollo'
 
-class QuestionCard extends React.Component {
-    setMenuRef = ref => {
-        this._menu = ref
-    }
+const get12HouredTime = hour => {
+  if (hour > 12) {
+    return `오후 ${pad(hour - 12, 2)}`
+  }
+  return `오전 ${pad(hour, 2)}`
+}
+const formatDate = date => {
+  return `${
+    date.getFullYear() === new Date().getFullYear()
+      ? ''
+      : date.getFullYear() + '년'
+  } ${date.getMonth() + 1}월 ${date.getDate()}일 ${get12HouredTime(
+    date.getHours(),
+  )}:${pad(date.getMinutes(), 2)}`
+}
 
-    hideMenu = () => {
-        this._menu.hide()
-    }
+const Photo = styled.Image`
+  width: 30px;
+  height: 30px;
+  border-radius: 30px;
+  margin-top: 5px;
+  margin-right: 5px;
+`
+const Uploder = styled.Text`
+  color: #505050;
+  font-weight: bold;
+  margin-left: 3px;
+`
+const Content = styled(Markdown)`
+  color: #202020;
+  font-size: 15;
+  line-height: 25;
+`
 
-    showMenu = () => {
-        this._menu.show()
+const UPDATE_METOO = gql`
+  mutation updateMetoo($question: ID!, $metoo: [ID]!) {
+    updateQuestion(input: {data: {metoo: $metoo}, where: {id: $question}}) {
+      question {
+        metoo {
+          id
+        }
+      }
     }
-    closeModal = () => {
-        this.setState(() => ({
-            modal: false
-        }))
-    }
-    state = {
-        modal: false
-    }
-    render() {
-        const { author, content, date, comments = [], metoo, navigate } = this.props
-        return <View style={styles.questionCardContainer}>
-            <MakeModal />
-            <BoxShadow setting={{
-                width: Dimensions.get('screen').width - 32,
-                height: 190,
-                color: "#000",
-                border: 12,
-                radius: 20,
-                opacity: 0.05,
-                backgroundColor: 'white'
-            }}>
-                <View style={styles.questionCard}>
-                    <View style={styles.questionBasicInfo}>
-                        <Text style={styles.questionUploader}>{author}</Text>
-                        <Text>{date}</Text>
-                        <TouchableNativeFeedback onPress={() => makeModal(this.modalArea)} hitSlop={{
-                            top: 10,
-                            left: 10,
-                            bottom: 10,
-                            right: 10
-                        }}>
-                            <Icon name="more-vert" size={20} style={styles.verticalDots} />
-                        </TouchableNativeFeedback>
-                    </View>
-                    <TouchableNativeFeedback onLongPress={() => {
-                        ToastAndroid.show('내용이 복사되었습니다', ToastAndroid.SHORT)
-                        navigate('FullscreenCard')
-                    }}>
-                        <Text style={styles.questionContent}>
-                            {content}
-                        </Text>
-                    </TouchableNativeFeedback>
-                    <View style={styles.questionBottomInfo}>
-                        <TouchableNativeFeedback onPress={() => {
-                            alert('GOOD')
-                        }}>
-                            <View style={{
-                                width: 50,
-                                display: 'flex',
-                                flexDirection: 'row'
-                            }}>
-                                <Icon name="question-answer" size={20} style={[styles.questionBottomIcons, {
-                                    marginLeft: 0
-                                }]} />
-                                <Text>{comments.length}</Text>
-                            </View>
-                        </TouchableNativeFeedback>
-                        <TouchableNativeFeedback onPress={() => {
-                            alert('GOOD')
-                        }}>
-                            <View style={{
-                                width: 50,
-                                display: 'flex',
-                                flexDirection: 'row'
-                            }}>
+  }
+`
 
-                                <Icon name="live-help" size={20} style={styles.questionBottomIcons} />
-                                <Text>{metoo}</Text>
-                            </View>
-                        </TouchableNativeFeedback>
-                    </View>
-                </View>
-            </BoxShadow>
-        </View>
+function QuestionCard({
+  user,
+  contents,
+  date,
+  comments,
+  metoo = [],
+  navigate,
+  briefly,
+  questionId,
+  refetch,
+  offline,
+  userData,
+  reported,
+  query,
+}) {
+  const report = () => {
+    Alert.alert(undefined, '신고되었습니다(더미)')
+  }
+  const copy = () => {
+    ToastAndroid.showWithGravity(
+      '내용이 복사되었습니다',
+      ToastAndroid.SHORT,
+      ToastAndroid.TOP,
+      0,
+      100,
+    )
+  }
+  const share = () => {
+    Alert.alert(undefined, '신고되었습니다.(더미)')
+    console.log('신고!')
+  }
+  const [updateMetoo] = useMutation(UPDATE_METOO)
 
-    }
+  const BasicInfo = styled.View`
+    display: flex;
+    flex-direction: row;
+    margin-bottom: ${briefly ? 7 : 15}px;
+  `
+  const userId = userData.data.user.id
+  console.log(contents, metoo)
+  return (
+    <TouchableNativeFeedback
+      onPress={() =>
+        navigate({
+          routeName: 'FullscreenCard',
+          params: {
+            user,
+            contents,
+            date: formatDate(date),
+            comments,
+            metoo,
+            questionId,
+            offline,
+            userData,
+            reported,
+            query,
+          },
+        })
+      }>
+      <View>
+        <CardView
+          styleMix={{
+            paddingTop: 12,
+          }}>
+          <View>
+            <BasicInfo>
+              {!briefly && (
+                <Photo
+                  source={{
+                    uri: user.photo,
+                  }}
+                />
+              )}
+              <View>
+                {!briefly && <Uploder>{user.name}</Uploder>}
+                <Text>{formatDate(date)}</Text>
+              </View>
+            </BasicInfo>
+            <Markdown>{contents}</Markdown>
+            <PostBrief
+              commentsAmount={comments.length}
+              metoo={metoo.length}
+              briefly={briefly}
+              ifMe={metoo.includes(userId)}
+              onClickMetoo={async () => {
+                console.log(
+                  '궁금해요?',
+                  metoo,
+                  metoo.includes(userId),
+                  userId,
+                  metoo.filter(e => e !== userId)
+                )
+                metoo.includes(userId)
+                  ? await updateMetoo({
+                      variables: {
+                        question: questionId,
+                        metoo: metoo.filter(e => e !== userId),
+                      },
+                      refetchQueries: [
+                        {
+                          query,
+                        },
+                      ],
+                    })
+                  : await updateMetoo({
+                      variables: {
+                        question: questionId,
+                        metoo: [...metoo, userId],
+                      },
+                      refetchQueries: [
+                        {
+                          query,
+                        },
+                      ],
+                    })
+              }}
+            />
+          </View>
+        </CardView>
+      </View>
+    </TouchableNativeFeedback>
+  )
 }
 
 const styles = StyleSheet.create({
-    questionCardContainer: {
-        marginTop: 15,
-    },
-    questionProfile: {
-        width: 35,
-        height: 35,
-        marginRight: 10
-    },
-    questionCard: {
-        backgroundColor: 'white',
-        height: 190,
-        padding: 18,
-        borderRadius: 12,
-        display: 'flex'
-    },
-    questionBasicInfo: {
-        display: 'flex',
-        flexDirection: 'row',
-        marginBottom: 15
-    },
-    verticalDots: {
-        flex: 1,
-        textAlign: 'right'
-    },
-    questionContent: {
-        color: '#202020',
-        fontSize: 15,
-        flexBasis: 80
-    },
-    questionUploader: {
-        color: '#707070',
-        fontWeight: '600',
-        marginRight: 10
-    },
-    questionBottomInfo: {
-        display: 'flex',
-        flexDirection: 'row',
-        marginTop: 20
-    },
-    questionBottomIcons: {
-        marginLeft: 10,
-        marginRight: 5
-    },
-    verticalMiddle: {
-        marginRight: 10
-    }
+  verticalDots: {
+    flex: 1,
+    textAlign: 'right',
+  },
 })
 
-export {
-    QuestionCard
-}
+export {QuestionCard}

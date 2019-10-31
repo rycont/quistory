@@ -1,0 +1,30 @@
+{
+  "connection": "default",
+  "collectionName": "comments",
+  "info": {
+    "name": "comment",
+    "description": "질문에 달리는 댓글/답변"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": [
+      "created_at",
+      "updated_at"
+    ],
+    "comment": ""
+  },
+  "attributes": {
+    "contents": {
+      "type": "string"
+    },
+    "question": {
+      "model": "question",
+      "via": "comments"
+    },
+    "user": {
+      "model": "user",
+      "via": "comments",
+      "plugin": "users-permissions"
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "connection": "default",
+  "collectionName": "quizunits",
+  "info": {
+    "name": "quizsubunit",
+    "description": "단원명"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": [
+      "created_at",
+      "updated_at"
+    ],
+    "comment": ""
+  },
+  "attributes": {
+    "subunit": {
+      "type": "string",
+      "unique": true,
+      "required": true
+    },
+    "image": {
+      "type": "string",
+      "required": true
+    },
+    "quizlargeunit": {
+      "model": "quizlargeunit",
+      "via": "quizsubunits"
+    },
+    "quizzes": {
+      "collection": "quiz",
+      "via": "quizsubunit"
+    },
+    "solved": {
+      "type": "integer",
+      "default": "0"
+    },
+    "average": {
+      "type": "float",
+      "max": 100,
+      "default": "0"
+    },
+    "bgcolor": {
+      "type": "string"
+    }
+  }
+}

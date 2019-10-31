@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "266296274697",
+    "firebase_url": "https://quistory.firebaseio.com",
+    "project_id": "quistory",
+    "storage_bucket": "quistory.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:266296274697:android:a4c65a331c54df466aadd8",
+        "android_client_info": {
+          "package_name": "com.quistory"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "266296274697-kumpgsok17a9it9v4k97ptd5mangttfm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.quistory",
+            "certificate_hash": "3a3a072e7054750779ed96ae8ecd3d4279dadd49"
+          }
+        },
+        {
+          "client_id": "266296274697-nmd6qd0acsi062vgsgh78lnthunc48t3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDoVDtSuSBJU6Ul6PHWh6N2ULdpwA71SIw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "266296274697-nmd6qd0acsi062vgsgh78lnthunc48t3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

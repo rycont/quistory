@@ -1,0 +1,39 @@
+{
+  "connection": "default",
+  "collectionName": "questions",
+  "info": {
+    "name": "question",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": [
+      "created_at",
+      "updated_at"
+    ],
+    "comment": ""
+  },
+  "attributes": {
+    "comments": {
+      "collection": "comment",
+      "via": "question"
+    },
+    "contents": {
+      "type": "text"
+    },
+    "reported": {
+      "type": "integer",
+      "default": "0"
+    },
+    "user": {
+      "model": "user",
+      "via": "questions",
+      "plugin": "users-permissions"
+    },
+    "metoo": {
+      "collection": "user",
+      "via": "metooed",
+      "plugin": "users-permissions"
+    }
+  }
+}
